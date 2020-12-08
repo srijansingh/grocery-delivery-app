@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Animated, Button, Dimensions, FlatList, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { useDispatch, useSelector } from 'react-redux';
 import { URL } from '../../../BASE_URL';
 import BackButton from '../../Component/BackButton';
 import Color from '../../Constant/Color';
@@ -8,7 +9,9 @@ import FontFamily from '../../Constant/FontFamily';
 import ProductHorizontalSkeleton from './Component/Placeholder/ProductHorizontalSkeleton';
 import ProductHorizontalComponent from './Component/ProductHorizontalComponent';
 import SubcategoryComponent from './Component/SubcategoryComponent';
-const {width, height} = Dimensions.get("screen")
+const {width, height} = Dimensions.get("screen");
+
+import * as subcategoryAction from '../../Store/action/subcategory'
 
 const CategoryScreen = ({route, navigation}) => {
     const { title,id,subId, subIndex } = route.params;
@@ -18,58 +21,49 @@ const CategoryScreen = ({route, navigation}) => {
     const [sub, setSub] = useState(subId)
     const [activeIndex, setActiveIndex] = useState(subIndex)
 
+
+    const availableProduct = useSelector(state => state.products.availableProduct);
+    const productSubcategory = availableProduct.filter(product => product.subcategory === sub);
+
+    const renderRef = useRef();
+
+      
+      const getItemLayout = (data, index) =>{
+        return {
+            length:80, offset:80*index, index
+        }
+      }
+   
+
     useEffect(() => {
-        setProductLoading(true)
-        fetch(URL+'/product/sub/'+sub,{
-          method: "GET",
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-          }
-        })
-        .then(res => {
-          if(res.status !==200){
-              throw new Error('Failed to fetch the product')
-          }
-          return res.json()
-      }).then(response => {
-         console.log(response.data)
-          setProduct(response.data)
-          setProductLoading(false)
-        //   this.flatList.scrollToIndex({
-        //     animated : true, index:activeIndex
-        // })
-      })
-      .catch(err => {
-         console.log(err)
-         setProductLoading(false)
-      })
+            renderRef.current.scrollToOffset({
+                animated : true, offset:activeIndex*80
+            })
+        
       },[sub])
 
 
-      useEffect(() => {
-        
-        fetch(URL+'/category/'+id,{
-          method: "GET",
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-          }
-        })
-        .then(res => {
-          if(res.status !==200){
-              throw new Error('Failed to fetch the product')
-          }
-          return res.json()
-      }).then(response => {
-          setSubcategory(response.data)
-         
-      })
-      .catch(err => {
-         console.log(err)
-        
-      })
-      },[])
+      const dispatch = useDispatch();
+      const subcategoryData = useSelector(state => state.subcategories.availableSubcategory);
+      const [isLoading, setIsLoading] = useState(false);
+      const [error, setError] =useState()
+
+      const loadCategory = useCallback(async () => {
+        setError(null)
+        setIsLoading(true)
+        try{
+            await dispatch(subcategoryAction.fetchSubcategory(id));
+        }catch(err){
+            setError(err.message)
+        }
+    
+        setIsLoading(false)
+    }, [dispatch,id,setIsLoading,setError]);
+    
+    useEffect(() => {
+        loadCategory();
+    }, [dispatch,loadCategory]);
+
 
       const renderItem = ({item,index}) => {
        
@@ -102,12 +96,7 @@ const CategoryScreen = ({route, navigation}) => {
         </>
     )
 
-      
-      const getItemLayout = (data, index) =>{
-        return {
-            length:110, offset:110*index, index
-        }
-      }
+    
       const handleSucategory = (id, index) => {
             setSub(id)
             setActiveIndex(index)
@@ -160,11 +149,11 @@ const CategoryScreen = ({route, navigation}) => {
                 <View style={styles.subcategory}>
                     <FlatList
                         getItemLayout={getItemLayout}
-                        extraData={subcategory} 
-                       // ref={(ref) =>{ this.flatList = ref;}}
+                        extraData={subcategoryData} 
+                        ref={renderRef}
                         showsHorizontalScrollIndicator={false}
                         horizontal={true}
-                        data={subcategory}
+                        data={subcategoryData}
                         keyExtractor={item => item._id}
                         renderItem={renderItem}
                     />
@@ -178,7 +167,7 @@ const CategoryScreen = ({route, navigation}) => {
                        loader
                     :
                     <FlatList 
-                    data={product}
+                    data={productSubcategory}
                     keyExtractor={item => item._id}
                     renderItem={itemData => (
                      
@@ -188,12 +177,7 @@ const CategoryScreen = ({route, navigation}) => {
                                     category:itemData.item.category,
                                     subcategory:itemData.item.subcategory,
                                     id:itemData.item._id,
-                                    discount:itemData.item.discount*100,
-                                    cp:itemData.item.costprice,
-                                    sp:itemData.item.sellingprice,
-                                    url:itemData.item.imageurl,
-                                    title:itemData.item.title,
-                                    description:itemData.item.description
+                                    title:itemData.item.title
                                 })
                             }}
                             title={itemData.item.title}

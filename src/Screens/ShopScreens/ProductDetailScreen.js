@@ -1,106 +1,39 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ActivityIndicator, Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import BackButton from '../../Component/BackButton';
 import Color from '../../Constant/Color';
 import FontFamily from '../../Constant/FontFamily';
-const {height, width} = Dimensions.get("screen")
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import HeaderTitle from '../../Component/HeaderTitle';
 import { URL } from '../../../BASE_URL';
 import ProductVerticalComponent from './Component/ProductVerticalComponent';
+import { useSelector } from 'react-redux';
+
+
+const {height, width} = Dimensions.get("screen")
 
 const ProductDetailScreen = ({route, navigation}) => {
 
-    const {id, title, cp, sp,url, discount, description, category, subcategory} = route.params;
+    const {id, title, category, subcategory} = route.params;
     const [isDescriptionShow, setDescriptionShown] = useState(true);
-    const [similarProduct, setsimilarProduct] = useState([])
-    const [isSimilarLoading, setisSimilarLoading] = useState(false)
-    const [recommendedProduct, setrecommendedProduct] = useState([])
-    const [isRecommendLoading, setisRecommendLoading] = useState(false)
 
     const handleDescription = () => {
         setDescriptionShown(!isDescriptionShow)
     }
 
 
-    const [isLoading, setisLoading] = useState(false)
+    //Product Detail
+    const availableProduct = useSelector(state => state.products.availableProduct);
+    const productDetails = availableProduct.find(product => product._id === id);
+    const productCategory = availableProduct.filter(product => product.category === category);
+    const productSubcategory = availableProduct.filter(product => product.subcategory === subcategory);
 
-    useEffect(() => {
-        setisLoading(true)
-        fetch(URL+'/product/'+id,{
-          method: "GET",
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-          }
-        })
-        .then(res => {
-          if(res.status !==200){
-              throw new Error('Failed to fetch the product')
-          }
-          return res.json()
-      }).then(response => {
-          setisLoading(false)
-      })
-      .catch(err => {
-         console.log(err)
-         setisLoading(false)
-      })
-      },[id])
+    const refContainer = useRef();
 
-
-    useEffect(() => {
-        setisSimilarLoading(true)
-        fetch(URL+'/product/sub/'+subcategory,{
-          method: "GET",
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-          }
-        })
-        .then(res => {
-          if(res.status !==200){
-              throw new Error('Failed to fetch the product')
-          }
-          return res.json()
-      }).then(response => {
-         console.log(response.data)
-          setsimilarProduct(response.data)
-          setisSimilarLoading(false)
-      })
-      .catch(err => {
-         console.log(err)
-         setisSimilarLoading(false)
-      })
-      },[id])
-
-
-
-
-      useEffect(() => {
-        setisRecommendLoading(true)
-        fetch(URL+'/product/category/'+category,{
-          method: "GET",
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-          }
-        })
-        .then(res => {
-          if(res.status !==200){
-              throw new Error('Failed to fetch the product')
-          }
-          return res.json()
-      }).then(response => {
-            setrecommendedProduct(response.data)
-          setisRecommendLoading(false)
-      })
-      .catch(err => {
-         console.log(err)
-         setisRecommendLoading(false)
-      })
-      },[id])
-
+     useEffect(() => {
+        refContainer.current.scrollTo({x: 0, y: 0, animated: true});
+     },[id])
+   
 
      const renderSimilar = ({item, index}) => {
         return <ProductVerticalComponent 
@@ -109,12 +42,7 @@ const ProductDetailScreen = ({route, navigation}) => {
                     category:item.category,
                     subcategory:item.subcategory,
                     id:item._id,
-                    discount:item.discount*100,
-                    cp:item.costprice,
-                    sp:item.sellingprice,
-                    url:item.imageurl,
-                    title:item.title,
-                    description:item.description
+                    title:item.title
                 })
             }}
             title={item.title}
@@ -125,7 +53,6 @@ const ProductDetailScreen = ({route, navigation}) => {
 
         />
      }
-
 
      const loader = (
          <View style={{
@@ -139,15 +66,6 @@ const ProductDetailScreen = ({route, navigation}) => {
              <ActivityIndicator color={Color.icon} size={20} size="large" />
          </View>
      )
-
-     
-
-     let newdiscount = 0;
-     if(discount >= 1){
-         newdiscount = discount.toFixed(0)
-     }
-
-
 
     return (
         <>
@@ -163,7 +81,9 @@ const ProductDetailScreen = ({route, navigation}) => {
                     </View>
                 </View>
             </View>
-        <ScrollView>
+        <ScrollView 
+            ref={refContainer}
+        >
         <View>
             
 
@@ -173,7 +93,7 @@ const ProductDetailScreen = ({route, navigation}) => {
                <Image 
                    style={styles.image}
                    source={{
-                       uri:url
+                       uri:productDetails.imageurl
                    }}
                />
            </View>
@@ -184,11 +104,11 @@ const ProductDetailScreen = ({route, navigation}) => {
                 backgroundColor:'white'
             }}>
                     <View style={styles.offer}>
-                       <Text style={styles.offerText}>{newdiscount+'% OFF'}</Text>
+                       <Text style={styles.offerText}>{productDetails.discount*100+'% OFF'}</Text>
                     </View>
 
                     <View style={styles.title}>
-                        <Text style={styles.titleText}>{title}</Text>
+                        <Text style={styles.titleText}>{productDetails.title}</Text>
                     </View>
 
                     <View style={styles.priceBox}>
@@ -201,7 +121,7 @@ const ProductDetailScreen = ({route, navigation}) => {
                             marginLeft:5,
                             textDecorationLine:"line-through",
                             color:Color.icon
-                        }}>{'\u20B9'+cp}</Text>
+                        }}>{'\u20B9'+productDetails.costprice}</Text>
                     </View>
 
                     <View style={styles.priceBox}>
@@ -212,7 +132,7 @@ const ProductDetailScreen = ({route, navigation}) => {
                             fontFamily:FontFamily.bold,
                             fontSize:16,
                             marginLeft:5
-                        }}>{'\u20B9'+sp}</Text>
+                        }}>{'\u20B9'+productDetails.sellingprice}</Text>
                     </View>
 
                     <View style={[styles.priceBox,styles.buttonBox]}>
@@ -294,7 +214,7 @@ const ProductDetailScreen = ({route, navigation}) => {
                                 fontFamily:FontFamily.light,
                                 color:Color.icon,
                                 fontSize:13
-                            }}>{description}</Text>
+                            }}>{productDetails.description}</Text>
                         </View>
                         :
                         null
@@ -302,11 +222,7 @@ const ProductDetailScreen = ({route, navigation}) => {
                 
             </View>
 
-            {
-                isSimilarLoading ?
-
-                loader 
-                :
+           
                 <View style={{
                     marginBottom:8,
                     backgroundColor:'white',
@@ -325,7 +241,7 @@ const ProductDetailScreen = ({route, navigation}) => {
                         showsHorizontalScrollIndicator={false}
                         style={styles.similarBox}
                         horizontal={true}
-                        data={similarProduct}
+                        data={productSubcategory}
                         keyExtractor={item => item._id}
                         renderItem={renderSimilar}
                         
@@ -335,14 +251,7 @@ const ProductDetailScreen = ({route, navigation}) => {
 
                 
 
-            }
-
-            {
-                isSimilarLoading && isRecommendLoading 
-
-                ?
-
-                null :
+            
                 <View style={{
                     marginBottom:8,
                     backgroundColor:'white',
@@ -361,14 +270,14 @@ const ProductDetailScreen = ({route, navigation}) => {
                         showsHorizontalScrollIndicator={false}
                         style={styles.similarBox}
                         horizontal={true}
-                        data={recommendedProduct}
+                        data={productCategory}
                         keyExtractor={item => item._id}
                         renderItem={renderSimilar}
                         
                     />
     
                 </View>
-            }
+           
 
             
         </View>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Button, Dimensions, Image, ImageBackground, StatusBar, StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
@@ -22,6 +22,11 @@ import AccordianComponent from './Component/AccordianComponent';
 import SubcategoryComponent from './Component/SubcategoryComponent';
 import AccordianSkeleton from './Component/Placeholder/AccordianSkeleton';
 
+import { useDispatch, useSelector } from 'react-redux';
+import * as productAction from '../../Store/action/product';
+import * as categoryAction from '../../Store/action/category'
+
+
 const {width, height} = Dimensions.get("screen")
 
 const HomeScreen = (props) => {
@@ -31,62 +36,58 @@ const HomeScreen = (props) => {
   }
 
   const [category, setCategory] = useState([])
-  const [isCategoryLoading, setCategoryLoading] = useState(false)
   const [product, setProduct] = useState([])
-  const [isProductLoading, setProductLoading] = useState(false)
+  const [error, setError] = useState();
   const [slider, setSlider] = useState([]);
   const [isSwiperLoading, setSwiperLoading] = useState(false)
 
 
-  useEffect(() => {
+  // Category
+  const [isCategoryLoading, setCategoryLoading] = useState(false)
+
+  const categoryData = useSelector(state => state.categories.availableCategory);
+  const dispatch = useDispatch();
+
+  const loadCategory = useCallback(async () => {
+    setError(null)
     setCategoryLoading(true)
-    fetch(URL+'/category',{
-      method: "GET",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      }
-    })
-    .then(res => {
-      if(res.status !==200){
-          throw new Error('Failed to fetch the product')
-      }
-      return res.json()
-  }).then(response => {
-      setCategory(response.data)
-      setCategoryLoading(false)
-  })
-  .catch(err => {
-     console.log(err)
-     setCategoryLoading(false)
-  })
-  },[])
+    try{
+        await dispatch(categoryAction.fetchCategory());
+    }catch(err){
+        setError(err.message)
+    }
+
+    setCategoryLoading(false)
+}, [dispatch,setCategoryLoading,setError]);
+
+useEffect(() => {
+    loadCategory();
+}, [dispatch,loadCategory]);
 
 
-  useEffect(() => {
+
+
+  //Product
+  const [isProductLoading, setProductLoading] = useState(false);
+  const productData = useSelector(state => state.products.availableProduct);
+
+  const loadProduct = useCallback(async () => {
+    setError(null)
     setProductLoading(true)
-    fetch(URL+'/product',{
-      method: "GET",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      }
-    })
-    .then(res => {
-      if(res.status !==200){
-          throw new Error('Failed to fetch the product')
-      }
-      return res.json()
-  }).then(response => {
-      setProduct(response.data)
-      setProductLoading(false)
-  })
-  .catch(err => {
-     console.log(err)
-     setProductLoading(false)
-  })
-  },[])
+    try{
+        await dispatch(productAction.fetchProduct());
+    }catch(err){
+        setError(err.message)
+    }
 
+    setProductLoading(false)
+}, [dispatch,setProductLoading,setError]);
+
+useEffect(() => {
+    loadProduct();
+}, [dispatch,loadProduct]);
+
+//Product finished
 
   useEffect(() => {
     setSwiperLoading(true)
@@ -114,7 +115,7 @@ const HomeScreen = (props) => {
 
 
 
-  const categories = category.map((list, index) => {
+  const categories = categoryData.map((list, index) => {
     return <CategoryComponent 
               key={index}
               onButtonPress={() => {
@@ -131,7 +132,7 @@ const HomeScreen = (props) => {
         })
 
   
-  const products = product.slice(10, 20).map((list, index) => {
+  const products = productData.slice(10, 20).map((list, index) => {
     return <ProductComponent 
             key={index}
             onButtonPress={() => {
@@ -216,7 +217,7 @@ const HomeScreen = (props) => {
   )
 
 
-  const accordian = category.map((list, index) => {
+  const accordian = categoryData.map((list, index) => {
     if(list.subcategory.length > 0)
     {
       return <AccordianComponent {...props} key={index} url={list.imageurl} title={list.category} id={list._id} />
@@ -224,7 +225,7 @@ const HomeScreen = (props) => {
   })
 
   const accordianLoading = (
-    <>
+    <> 
       <AccordianSkeleton />
       <AccordianSkeleton />
       <AccordianSkeleton />

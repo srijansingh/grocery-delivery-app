@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Image } from 'react-native';
 import { TouchableRipple } from 'react-native-paper';
-import { sub } from 'react-native-reanimated';
 import { URL } from '../../../../BASE_URL';
 import Color from '../../../Constant/Color';
 import FontFamily from '../../../Constant/FontFamily';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import * as Animatable from 'react-native-animatable';
-import Animated from 'react-native-reanimated';
 import Placeholder from '../../../Component/Placeholder';
 
 const {width, height} = Dimensions.get("screen")
@@ -36,10 +33,10 @@ const AccordianComponent = (props) => {
             return res.json()
         }).then(response => {
             setIsLoading(false)
-          setSubCategory(response.data)
-          setSubtitle(response.data.map(list => (
-              list.subcategory
-          )).join(', '))
+            setSubCategory(response.data)
+            setSubtitle(response.data.map(list => (
+                list.subcategory
+            )).join(', '))
            
         })
         .catch(err => {

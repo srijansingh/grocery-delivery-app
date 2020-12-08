@@ -1,18 +1,52 @@
-import React from 'react'
-import { Dimensions, StyleSheet, Text, TextInput, View } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Dimensions, FlatList, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Searchbar, TouchableRipple } from 'react-native-paper';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { useDispatch, useSelector } from 'react-redux';
 import BackButton from '../../Component/BackButton';
 import Color from '../../Constant/Color';
 import FontFamily from '../../Constant/FontFamily';
-
+import * as productAction from '../../Store/action/product';
 
 const SearchScreen = (props) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null)
+    const products = useSelector(state => state.products.availableProduct);
+    const dispatch = useDispatch();
 
-    console.warn(props.route.params)
+    const loadProduct = useCallback(async () => {
+        setError(null)
+        setIsLoading(true);
+        try{
+            await dispatch(productAction.fetchProduct());
+        }catch(err){
+            setError(err.message)
+        }
 
-   
+        setIsLoading(false)
+    }, [dispatch,setIsLoading,setError]);
+
+    useEffect(() => {
+        loadProduct();
+    }, [dispatch,loadProduct]);
+
+    useEffect(() => {
+        const willFocusSub = props.navigation.addListener('willFocus', loadProduct);
+        return () => {
+            willFocusSub.remove();
+        }
+    }, [loadProduct]);
+
+    const render = products.map((list, index) => {
+        return (
+            <View key={list._id}>
+                <Text>{list.title}</Text>
+            </View>
+        )
+    })
+    
+
     return (
         <View style={{flex:1,justifyContent:'space-between', alignItems:'center'}}>
             <View style={styles.header}>
@@ -32,15 +66,26 @@ const SearchScreen = (props) => {
                         autoFocus={true}
                     
                     />
-                    <TouchableRipple  style={styles.searchIcon} onPress={() => {}} >
+                    {/* <TouchableRipple  style={styles.searchIcon} onPress={() => {}} >
                         <MaterialIcons 
                             name="search" 
                             size={24} 
                             color={Color.icon}
                         />
-                    </TouchableRipple>
+                    </TouchableRipple> */}
                 </View>
             </View>
+
+            {
+                isLoading ?
+                <View>
+                    <Text>Loading...</Text>
+                </View>
+                :
+                render
+            }
+
+            
             
         </View>
     )
