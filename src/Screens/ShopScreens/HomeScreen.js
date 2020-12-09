@@ -33,7 +33,7 @@ const {width, height} = Dimensions.get("screen")
 const HomeScreen = (props) => {
 
  
-
+  const cartCount = useSelector(state => state.cart.totalItem );
 
 
   // const handleClick = (list) => {
@@ -153,6 +153,7 @@ useEffect(() => {
                   description:list.description
               })
           }}
+            id={list._id}
             title={list.title}
             discount={list.discount*100}
             cp={list.costprice}
@@ -252,6 +253,7 @@ useEffect(() => {
                 </Swiper>
                 </View>
 
+      <View><Text>{cartCount}</Text></View>
 
                 
                 <LinearGradient colors={['#FF4600','#FF4600', Color.accent,'#FD7600',]} style={styles.offer}>
@@ -359,7 +361,7 @@ export default HomeScreen;
 
 
 export const screenOptions = navData => {
-
+  
 
     return {
     headerTitle:() => (

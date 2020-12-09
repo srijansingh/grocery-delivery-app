@@ -3,9 +3,12 @@ import { Dimensions,TouchableNativeFeedback, Image, StyleSheet, Text, View, Touc
 import Color from '../../../Constant/Color'
 import FontFamily from '../../../Constant/FontFamily'
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TouchableRipple } from 'react-native-paper'
 // import { TouchableNativeFeedback } from 'react-native-gesture-handler'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
+import { useDispatch, useSelector } from 'react-redux'
+import * as cartAction from '../../../Store/action/cart'
 
 const {width, height} = Dimensions.get("screen")
 
@@ -16,9 +19,70 @@ const ProductHorizontalComponent = (props) => {
         discount = props.discount.toFixed(0)
     }
 
-    const rightAction = () => {
-    return <View><Text>{props.title}</Text></View>
+    const userid = useSelector(state => state.auth.userId);
+    const availableProduct = useSelector(state => state.products.availableProduct);
+    const productDetails = availableProduct.find(product => product._id === props.id);
+
+    const item = useSelector(state => state.cart.items);
+    const dispatch = useDispatch();
+
+    let addButton;
+
+    if(item[props.id]){
+        addButton = (
+            <View style={styles.countBox}>
+                <TouchableOpacity 
+                activeOpacity={0.8} 
+                onPress={() => {
+                    dispatch(cartAction.removeFromCart(props.id))
+                }}
+                style={styles.icon}>
+                    <MaterialCommunityIcon
+                        name="minus"
+                        size={15}
+                        color={'white'}
+                    />
+                </TouchableOpacity>
+                <View style={styles.countText}>
+                    <Text style={{color:Color.button,fontSize:12,fontFamily:FontFamily.bold}}>{item[props.id].quantity}</Text>
+                </View>
+                <TouchableOpacity 
+                activeOpacity={0.8} 
+                 onPress={() => {
+                    dispatch(cartAction.addToCart(productDetails, userid))
+                }}
+                style={styles.icon}>
+                    <MaterialIcons 
+                        name="add"
+                        size={15}
+                        color={'white'}
+                    />
+                </TouchableOpacity>
+            </View> 
+        )
+    }else{
+        addButton = (
+            <TouchableOpacity 
+            activeOpacity={0.8}
+            onPress={() => {
+                dispatch(cartAction.addToCart(productDetails, userid))
+            }}
+            style={styles.buttonBox}>
+                <View style={styles.buttonText}>
+                    <Text style={{color:'white',fontSize:12,fontFamily:FontFamily.bold}}>ADD</Text>
+                </View>
+                <View  style={styles.icons}>
+                    <MaterialIcons 
+                        name="add"
+                        size={15}
+                        color={'white'}
+                    />
+                </View>
+            </TouchableOpacity> 
+        )
     }
+
+
 
     return (
        
@@ -31,8 +95,8 @@ const ProductHorizontalComponent = (props) => {
             width:'96%',
             marginHorizontal:'2%',
             backgroundColor:'white',
-            // borderBottomWidth:1,
-            // borderBottomColor:'#f1f1f1',
+            borderBottomWidth:1,
+            borderBottomColor:'#f1f1f1',
             elevation:1,
             borderRadius:5,
             
@@ -137,51 +201,8 @@ const ProductHorizontalComponent = (props) => {
                             </Text>
                     </View>
 
-                    <View style={{
-                        height:50,
-                        width:'100%',
-                        justifyContent:'flex-start',
-                        alignItems:'flex-end',
-                        paddingHorizontal:12
-                    }}>
-                        <View style={{
-                            width:100,
-                            height:'60%',
-                            backgroundColor:'orange',
-                            justifyContent:'center',
-                            alignItems:'flex-end',
-                            borderRadius:5,
-                            overflow:'hidden',
-                            flexDirection:'row'
-                        }}>
-                            <View style={{
-                                    width:'75%',
-                                    height:'100%',
-                                    backgroundColor:Color.button,
-                                    justifyContent:'center',
-                                    alignItems:'center',
-                            }}>
-                                <Text style={{
-                                    color:'white',
-                                    fontSize:12,
-                                    fontFamily:FontFamily.bold
-                                }}>ADD</Text>
-                            </View>
-                            <View  style={{
-                                    width:'25%',
-                                    height:'100%',
-                                    backgroundColor:Color.plus,
-                                    justifyContent:'center',
-                                    alignItems:'center',
-                                    elevation:1
-                            }}>
-                                <MaterialIcons 
-                                    name="add"
-                                    size={18}
-                                    color={'white'}
-                                />
-                            </View>
-                        </View>    
+                    <View style={styles.buttonContainer}>
+                        {addButton}
                     </View>
                 <View>
                     
@@ -197,4 +218,64 @@ const ProductHorizontalComponent = (props) => {
 
 export default ProductHorizontalComponent
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    buttonContainer:{
+        height:50,
+        width:'100%',
+        justifyContent:'flex-start',
+        alignItems:'flex-end',
+        paddingHorizontal:12
+    },
+    buttonBox:{
+        width:100,
+        height:'60%',
+        backgroundColor:Color.button,
+        justifyContent:'center',
+        alignItems:'flex-end',
+        borderRadius:5,
+        overflow:'hidden',
+        flexDirection:'row'
+    },
+    countBox:{
+        width:100,
+        height:'60%',
+        backgroundColor:'white',
+        justifyContent:'center',
+        alignItems:'flex-end',
+        borderRadius:5,
+        overflow:'hidden',
+        flexDirection:'row'
+    },
+    buttonText:{
+        width:'70%',
+        height:'100%',
+        backgroundColor:Color.button,
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    countText:{
+        width:'40%',
+        height:'100%',
+        backgroundColor:'white',
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    icon:{
+        width:'30%',
+        height:'100%',
+        borderRadius:5,
+        backgroundColor:Color.button,
+        justifyContent:'center',
+        alignItems:'center',
+        elevation:1
+},
+icons:{
+    width:'30%',
+    height:'100%',
+    borderRadius:5,
+    backgroundColor:Color.plus,
+    justifyContent:'center',
+    alignItems:'center',
+    elevation:1
+}
+})

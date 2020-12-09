@@ -4,16 +4,17 @@ import BackButton from '../../Component/BackButton';
 import Color from '../../Constant/Color';
 import FontFamily from '../../Constant/FontFamily';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HeaderTitle from '../../Component/HeaderTitle';
 import { URL } from '../../../BASE_URL';
 import ProductVerticalComponent from './Component/ProductVerticalComponent';
-import { useSelector } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
+import * as cartAction from '../../Store/action/cart'
 
 const {height, width} = Dimensions.get("screen")
 
 const ProductDetailScreen = ({route, navigation}) => {
-
+    const userid = useSelector(state => state.auth.userId);
     const {id, title, category, subcategory} = route.params;
     const [isDescriptionShow, setDescriptionShown] = useState(true);
 
@@ -21,12 +22,75 @@ const ProductDetailScreen = ({route, navigation}) => {
         setDescriptionShown(!isDescriptionShow)
     }
 
+    const dispatch = useDispatch()
+
 
     //Product Detail
     const availableProduct = useSelector(state => state.products.availableProduct);
     const productDetails = availableProduct.find(product => product._id === id);
     const productCategory = availableProduct.filter(product => product.category === category);
     const productSubcategory = availableProduct.filter(product => product.subcategory === subcategory);
+    
+    const cartItem = useSelector(state => state.cart.items);
+    const cartCount = useSelector(state => state.cart.totalAmount);
+    const item = useSelector(state => state.cart.items);
+
+    let addButton;
+
+    if(item[id]){
+        addButton = (
+            <View style={styles.countBox}>
+                <TouchableOpacity 
+                activeOpacity={0.8} 
+                onPress={() => {
+                    dispatch(cartAction.removeFromCart(id))
+                }}
+                style={styles.icon}>
+                    <MaterialCommunityIcon
+                        name="minus"
+                        size={15}
+                        color={'white'}
+                    />
+                </TouchableOpacity>
+                <View style={styles.countText}>
+                    <Text style={{color:Color.button,fontSize:12,fontFamily:FontFamily.bold}}>{item[id].quantity}</Text>
+                </View>
+                <TouchableOpacity 
+                activeOpacity={0.8} 
+                 onPress={() => {
+                    dispatch(cartAction.addToCart(productDetails, userid))
+                }}
+                style={styles.icon}>
+                    <MaterialIcons 
+                        name="add"
+                        size={15}
+                        color={'white'}
+                    />
+                </TouchableOpacity>
+            </View> 
+        )
+    }else{
+        addButton = (
+            <TouchableOpacity 
+            activeOpacity={0.8}
+            onPress={() => {
+                dispatch(cartAction.addToCart(productDetails, userid))
+            }}
+            style={styles.addButton}>
+                <View style={styles.buttonText}>
+                    <Text style={{color:'white',fontSize:12,fontFamily:FontFamily.bold}}>ADD</Text>
+                </View>
+                <View  style={styles.icons}>
+                    <MaterialIcons 
+                        name="add"
+                        size={15}
+                        color={'white'}
+                    />
+                </View>
+            </TouchableOpacity> 
+        )
+    }
+  
 
     const refContainer = useRef();
 
@@ -85,114 +149,47 @@ const ProductDetailScreen = ({route, navigation}) => {
             ref={refContainer}
         >
         <View>
+            <View style={styles.imageBox}>
+            <Image 
+                style={styles.image}
+                source={{
+                    uri:productDetails.imageurl
+                }}
+            />
+        </View>
             
 
-          
-
-               <View style={styles.imageBox}>
-               <Image 
-                   style={styles.image}
-                   source={{
-                       uri:productDetails.imageurl
-                   }}
-               />
-           </View>
-            
-
-            <View style={{
-                padding:15,
-                backgroundColor:'white'
-            }}>
+            <View style={{padding:15,backgroundColor:'white'}}>
                     <View style={styles.offer}>
                        <Text style={styles.offerText}>{productDetails.discount*100+'% OFF'}</Text>
                     </View>
-
                     <View style={styles.title}>
                         <Text style={styles.titleText}>{productDetails.title}</Text>
                     </View>
-
                     <View style={styles.priceBox}>
-                        <Text style={{
-                            fontFamily:FontFamily.light,
-                            fontSize:15
-                        }}>Product MRP:</Text><Text style={{
-                            fontFamily:FontFamily.light,
-                            fontSize:15,
-                            marginLeft:5,
-                            textDecorationLine:"line-through",
-                            color:Color.icon
-                        }}>{'\u20B9'+productDetails.costprice}</Text>
+                        <Text style={styles.costHead}>Product MRP:</Text>
+                        <Text style={styles.costprice}>{'\u20B9'+productDetails.costprice}</Text>
                     </View>
 
                     <View style={styles.priceBox}>
-                        <Text style={{
-                            fontFamily:FontFamily.regular,
-                            fontSize:16
-                        }}>Selling Price:</Text><Text style={{
-                            fontFamily:FontFamily.bold,
-                            fontSize:16,
-                            marginLeft:5
-                        }}>{'\u20B9'+productDetails.sellingprice}</Text>
+                        <Text style={styles.sellingHead}>Selling Price:</Text>
+                        <Text style={styles.sellingprice}>{'\u20B9'+productDetails.sellingprice}</Text>
                     </View>
 
                     <View style={[styles.priceBox,styles.buttonBox]}>
                         <Text style={styles.tinyText}>(Inclusive of all taxes)</Text>
 
-                        <View style={styles.addButton}>
-                            <View style={{
-                                    width:'75%',
-                                    height:'100%',
-                                    backgroundColor:Color.button,
-                                    justifyContent:'center',
-                                    alignItems:'center',
-                            }}>
-                                <Text style={{
-                                    color:'white',
-                                    fontSize:12,
-                                    fontFamily:FontFamily.bold
-                                }}>ADD</Text>
-                            </View>
-                            <View  
-                                style={{
-                                    width:'25%',
-                                    height:'100%',
-                                    backgroundColor:Color.plus,
-                                    justifyContent:'center',
-                                    alignItems:'center',
-                                    elevation:1
-                            }}>
-                                <MaterialIcons 
-                                    name="add"
-                                    size={18}
-                                    color={'white'}
-                                />
-                            </View>
-                        </View>
+                        {addButton}
                     </View>
 
             </View>
 
-            <View style={{
-                marginVertical:8,
-                backgroundColor:'white',
-               
-            }}>
+            <View style={{marginVertical:8,backgroundColor:'white'}}>
                <TouchableOpacity
                 onPress={handleDescription}
                 activeOpacity={0.8}
-                style={{
-                    padding:15,
-                    borderBottomWidth:1,
-                    borderBottomColor:"#f1f1f1",
-                    justifyContent:'space-between',
-                    flexDirection:'row'
-                }}
-                >
-                    <Text style={{
-                        fontSize:16,
-                        fontFamily:FontFamily.bold,
-                        color:Color.icon
-                    }}>Description</Text>
+                style={styles.description}>
+                    <Text style={styles.descriptionText}>Description</Text>
 
                     <View>
                         <MaterialIcons 
@@ -205,16 +202,8 @@ const ProductDetailScreen = ({route, navigation}) => {
 
                     {
                         isDescriptionShow ?
-                        <View style={{
-                            padding:15,
-                            minHeight:150
-                        }}>
-                            <Text 
-                            style={{
-                                fontFamily:FontFamily.light,
-                                color:Color.icon,
-                                fontSize:13
-                            }}>{productDetails.description}</Text>
+                        <View style={styles.details}>
+                            <Text style={styles.detailsText}>{productDetails.description}</Text>
                         </View>
                         :
                         null
@@ -223,11 +212,7 @@ const ProductDetailScreen = ({route, navigation}) => {
             </View>
 
            
-                <View style={{
-                    marginBottom:8,
-                    backgroundColor:'white',
-                   
-                }} >
+                <View style={{marginBottom:8,backgroundColor:'white'}} >
                     <HeaderTitle 
                         title="Similar Product"
                         themeColor="#FF4600"
@@ -252,11 +237,7 @@ const ProductDetailScreen = ({route, navigation}) => {
                 
 
             
-                <View style={{
-                    marginBottom:8,
-                    backgroundColor:'white',
-                
-                }} >
+                <View style={{marginBottom:8,backgroundColor:'white'}} >
                     <HeaderTitle 
                         title="Frequently Bought together"
                         themeColor="#FF4600"
@@ -277,9 +258,6 @@ const ProductDetailScreen = ({route, navigation}) => {
                     />
     
                 </View>
-           
-
-            
         </View>
         </ScrollView>
         </>
@@ -367,17 +345,110 @@ const styles = StyleSheet.create({
     },
     addButton:{
         width:110,
-        backgroundColor:'red',
         height:30,
         flexDirection:'row',
         borderRadius:3, 
         overflow:'hidden',
-        backgroundColor:'red',
+        backgroundColor:Color.button,
         
     },
     similarBox:{
         width:'100%',
         paddingVertical:8,
+    },
+
+    addbuttonBox:{
+        width:100,
+        height:'60%',
+        backgroundColor:Color.button,
+        justifyContent:'center',
+        alignItems:'flex-end',
+        borderRadius:5,
+        overflow:'hidden',
+        flexDirection:'row'
+    },
+    countBox:{
+        width:110,
+        height:30,
+        flexDirection:'row',
+        borderRadius:3, 
+        overflow:'hidden',
+        backgroundColor:'white',
+        
+    },
+    buttonText:{
+        width:'75%',
+        height:'100%',
+        backgroundColor:Color.button,
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    countText:{
+        width:'50%',
+        height:'100%',
+        backgroundColor:'white',
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    icon:{
+        width:'25%',
+        height:'100%',
+        borderRadius:5,
+        backgroundColor:Color.button,
+        justifyContent:'center',
+        alignItems:'center',
+        elevation:1
+    },
+    icons:{
+        width:'25%',
+        height:'100%',
+        borderRadius:5,
+        backgroundColor:Color.plus,
+        justifyContent:'center',
+        alignItems:'center',
+        elevation:1
+    },
+    costprice:{
+        fontFamily:FontFamily.light,
+        fontSize:15,
+        marginLeft:5,
+        textDecorationLine:"line-through",
+        color:Color.icon
+    },
+    costHead:{
+        fontFamily:FontFamily.light,
+        fontSize:15
+    },
+    sellingHead:{
+        fontFamily:FontFamily.regular,
+        fontSize:16
+    },
+    sellingprice:{
+        fontFamily:FontFamily.bold,
+        fontSize:16,
+        marginLeft:5
+    },
+    description:{
+        padding:15,
+        borderBottomWidth:1,
+        borderBottomColor:"#f1f1f1",
+        justifyContent:'space-between',
+        flexDirection:'row'
+    },
+    descriptionText:{
+        fontSize:16,
+        fontFamily:FontFamily.bold,
+        color:Color.icon
+    },
+    details:{
+        padding:15,
+        minHeight:150
+    },
+    detailsText:{
+        fontFamily:FontFamily.light,
+        color:Color.icon,
+        fontSize:13
     }
+
     
 })

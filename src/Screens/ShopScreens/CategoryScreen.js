@@ -180,6 +180,7 @@ const CategoryScreen = ({route, navigation}) => {
                                     title:itemData.item.title
                                 })
                             }}
+                            id={itemData.item._id}
                             title={itemData.item.title}
                             onSwipeFromLeft={() => alert('hello')}
                             discount={itemData.item.discount*100}

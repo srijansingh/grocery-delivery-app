@@ -9,12 +9,14 @@ import productReducer from './src/Store/reducer/product';
 import categoryReducer from './src/Store/reducer/category';
 import subcategoryReducer from './src/Store/reducer/subcategory';
 import authReducer from './src/Store/reducer/auth';
+import cartReducer from './src/Store/reducer/cart'
 
 const rootReducer = combineReducers({
   products:productReducer,
   categories:categoryReducer,
   subcategories:subcategoryReducer,
-  auth:authReducer
+  auth:authReducer,
+  cart:cartReducer
 })  
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk))
