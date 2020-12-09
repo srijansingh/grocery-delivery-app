@@ -24,16 +24,21 @@ import AccordianSkeleton from './Component/Placeholder/AccordianSkeleton';
 
 import { useDispatch, useSelector } from 'react-redux';
 import * as productAction from '../../Store/action/product';
-import * as categoryAction from '../../Store/action/category'
+import * as categoryAction from '../../Store/action/category';
+import * as authAction from '../../Store/action/auth';
 
 
 const {width, height} = Dimensions.get("screen")
 
 const HomeScreen = (props) => {
 
-  const handleClick = (list) => {
-    alert(list)
-  }
+ 
+
+
+
+  // const handleClick = (list) => {
+  //   alert(list)
+  // }
 
   const [category, setCategory] = useState([])
   const [product, setProduct] = useState([])

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Dimensions,TextInput, Image, ImageBackground, ScrollView, StatusBar, StyleSheet, Text, View, TouchableNativeFeedback, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Dimensions,TextInput, Image, ImageBackground, ScrollView, StatusBar, StyleSheet, Text, View, TouchableNativeFeedback, TouchableOpacity, Alert } from 'react-native'
 
 import Color from '../../Constant/Color'
 import FontFamily from '../../Constant/FontFamily'
@@ -9,27 +9,54 @@ import CustomButton from '../../Component/CustomButton'
 
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
+import { useDispatch } from 'react-redux';
+import * as authAction from '../../Store/action/auth';
 
 const LoginScreen = (props) => {
-    const [isLoading, setIsLoading] = useState(false);
-
-   
-
-
+    const [isError, setError] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
+    const [email, setEmail] = useState(null)
+    const [password, setPassword] = useState(null)
+    const dispatch = useDispatch()
 
     const handleClick=() => {
         setIsLoading(true)
     }
 
-    const renderHeader = () => {
-        return (
-            <View style={styles.header}>
-                <View style={styles.panelHeader}>
-                    <View style={styles.panelHandle} />
-                </View>
-            </View>
-        )
+    const authHandler = async() => {
+        let action;
+        action = authAction.login(email, password)
+        setError(null)
+        setIsLoading(true)
+
+        try {
+            await dispatch(action);
+        } catch (err) {
+            setError(err.message)
+            setIsLoading(false)
+        }
+
+       
     }
+
+    
+    useEffect(()=>{
+        if(isError){
+            Alert.alert('An error occurred', isError, [
+                {text:'Okay'}
+            ])
+        }
+  },[isError])
+
+    // const renderHeader = () => {
+    //     return (
+    //         <View style={styles.header}>
+    //             <View style={styles.panelHeader}>
+    //                 <View style={styles.panelHandle} />
+    //             </View>
+    //         </View>
+    //     )
+    // }
 
     const renderInner = () => (
         <View style={styles.panel}>
@@ -46,9 +73,7 @@ const LoginScreen = (props) => {
                 label="email"
            />
 
-            <View  
-                            style={styles.loginButton}
-                        >
+            <View style={styles.loginButton}>
             <CustomButton 
                 title="Send Reset Link"
                 icon="arrow-forward"
@@ -80,9 +105,7 @@ const LoginScreen = (props) => {
                     </View>
                 </View>
 
-                <View 
-                    style={styles.footer} 
-                >
+                <View style={styles.footer} >
                     <View style={styles.login}>
                             <Text style={styles.loginText}>Let's sign you in</Text>
                     </View> 
@@ -91,17 +114,30 @@ const LoginScreen = (props) => {
                             animation="fadeInUp"
                             duration={500}
                             style={styles.loginContainer}
+                            
                     >
                         <InputBox 
                             label="Email"
                             placeholder="Email"
                             icon="account-circle-outline"
+                            value={email}
+                            set={setEmail}
+                            keyboardType="email-address"
+                            required
+                            email
+                            autoCapitalize="none"
                         />
 
                         <InputBox 
                             label="Password"
                             placeholder="Password"
                             icon="key-outline"
+                            value={password}
+                            set={setPassword}
+                            secureTextEntry={password !== null}
+                            required
+                            minLength={5}
+                            autoCapitalize="none"
                         />
 
                         <View  
@@ -111,7 +147,7 @@ const LoginScreen = (props) => {
                             <CustomButton 
                                 title="SIGN IN"
                                 icon="arrow-forward"
-                                onButtonPress={handleClick}
+                                onButtonPress={authHandler}
                                 isLoading={isLoading}
 
                             />

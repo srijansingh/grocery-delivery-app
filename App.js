@@ -8,11 +8,13 @@ import ReduxThunk from "redux-thunk";
 import productReducer from './src/Store/reducer/product';
 import categoryReducer from './src/Store/reducer/category';
 import subcategoryReducer from './src/Store/reducer/subcategory';
+import authReducer from './src/Store/reducer/auth';
 
 const rootReducer = combineReducers({
   products:productReducer,
   categories:categoryReducer,
-  subcategories:subcategoryReducer
+  subcategories:subcategoryReducer,
+  auth:authReducer
 })  
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk))

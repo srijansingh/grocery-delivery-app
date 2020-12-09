@@ -13,6 +13,8 @@ import {
     Switch
 } from 'react-native-paper'
 import Color from '../../Constant/Color';
+import { useDispatch, useSelector } from 'react-redux';
+import * as authAction from '../../Store/action/auth';
 
 const DrawerContent = (props) => {
     const [isDark, setIsDark] = useState(false);
@@ -21,6 +23,10 @@ const DrawerContent = (props) => {
         setIsDark(!isDark)
     }
 
+    const dispatch = useDispatch();
+
+    const name = useSelector(state => state.auth.name);
+    const email = useSelector(state => state.auth.email);
 
     return (
         <View style={{flex:1}}> 
@@ -38,8 +44,8 @@ const DrawerContent = (props) => {
                         
 
                             <View style={{marginLeft:10}} >
-                                <Title style={styles.title}>Srijan Singh</Title>
-                                <Caption style={styles.caption}>@srijansingh</Caption>
+                            <Title style={styles.title}>{name}</Title>
+                            <Caption style={styles.caption}>{email}</Caption>
                             </View>
                         </View>
 
@@ -115,7 +121,9 @@ const DrawerContent = (props) => {
                         <MaterialIcons name="exit-to-app" size={size} color={color} />
                     )}
                     label="Sign Out"
-                    onPress={() => {}}
+                    onPress={() => {
+                        dispatch(authAction.logout())
+                    }} 
                 />
 
                 

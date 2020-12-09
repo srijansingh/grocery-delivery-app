@@ -11,15 +11,10 @@ import * as Animatable from 'react-native-animatable';
 const RootScreen = (props) => {
     return (
         <>
-         {/* <StatusBar backgroundColor={Color.primary} /> */}
+         <StatusBar backgroundColor={Color.primary} />
         <View style={styles.container}>
            
-            <View 
-                style={styles.image} 
-               
-                
-            
-            >
+            <View style={styles.image} >
                 <Animatable.Image 
                     source={require("../../../asset/images/logo.png")}
                     style={styles.logo}
@@ -44,7 +39,7 @@ const RootScreen = (props) => {
                     animation="bounceInLeft"
                     duration={3000}
                 >
-                    <LinearGradient colors={['#FFA641', Color.accent]} style={styles.buttonBox} >
+                    <LinearGradient colors={['#FFA641', Color.button]} style={styles.buttonBox} >
                             <TouchableNativeFeedback onPress={() => {props.navigation.navigate('Login')}}>
                                 <View style={styles.button} >
                                     <Text style={styles.buttonText} >Get Started</Text>

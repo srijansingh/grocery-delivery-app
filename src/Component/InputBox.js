@@ -21,15 +21,16 @@ const InputBox = (props) => {
                     <Icon name={props.icon} size={24} color={isBlur ? Color.accent : Color.icon} />
                 </View>
                 <TextInput 
+                    {...props}
                     style={styles.textInput}
                     placeholder={props.placeholder}
                     selectionColor={Color.icon}
                     onFocus={() => setIsBlur(true)}
                     onBlur={()=> setIsBlur(!isBlur)}
-                    onChangeText={(value) => setValue(value)}
+                    onChangeText={(value) => props.set(value)}
                 />
                 {
-                    value !== '' 
+                    props.value !== null
                     ?
                     <View style={styles.icon}>
                     <Icon name="check-circle-outline" size={24} color="green" />

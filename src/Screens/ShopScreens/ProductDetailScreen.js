@@ -32,7 +32,7 @@ const ProductDetailScreen = ({route, navigation}) => {
 
      useEffect(() => {
         refContainer.current.scrollTo({x: 0, y: 0, animated: true});
-     },[id])
+     },[id,refContainer])
    
 
      const renderSimilar = ({item, index}) => {

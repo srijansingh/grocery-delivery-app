@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Dimensions,TextInput, Image, ImageBackground, ScrollView, StatusBar, StyleSheet, Text, View, TouchableNativeFeedback, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Dimensions,TextInput, Image, ImageBackground, ScrollView, StatusBar, StyleSheet, Text, View, TouchableNativeFeedback, TouchableOpacity, Alert } from 'react-native'
 
 import Color from '../../Constant/Color'
 import FontFamily from '../../Constant/FontFamily'
@@ -9,15 +9,52 @@ import LinearGradient from 'react-native-linear-gradient'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import * as Animatable from 'react-native-animatable';
 import CustomButton from '../../Component/CustomButton'
-
+import { useDispatch } from 'react-redux'
+import * as authAction from '../../Store/action/auth';
 
 const SignupScreen = (props) => {
     const [isBlur, setIsBlur] = useState(false)
+    const [isError, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
+    const [email, setEmail] = useState(null)
+    const [password, setPassword] = useState(null)
+    const [name, setName] = useState(null);
+    const [confirmPwd, setConfirmPwd] = useState(null)
+
+    const dispatch = useDispatch();
 
     const handleClick=() => {
         setIsLoading(true)
     }
+
+
+    const authHandler = async() => {
+        let action;
+        action = authAction.signup(name, email, password)
+        setError(null)
+        setIsLoading(true)
+
+        try {
+            await dispatch(action);
+        } catch (err) {
+            setError(err.message)
+            setIsLoading(false)
+        }
+
+       
+    }
+
+    
+    useEffect(()=>{
+        if(isError){
+            Alert.alert('An error occurred', isError, [
+                {text:'Okay'}
+            ])
+        }
+  },[isError])
+
+
+
 
     return (
        
@@ -48,24 +85,35 @@ const SignupScreen = (props) => {
                             label="Name"
                             placeholder="Name"
                             icon="account-circle-outline"
+                            value={name}
+                            set={setName}
                         />
 
                         <InputBox 
                             label="Email"
                             placeholder="Email"
                             icon="email-outline"
+                            value={email}
+                            set={setEmail}
+                            email
                         />
 
                         <InputBox 
                             label="Choose Password"
                             placeholder="Password"
                             icon="key-outline"
+                            secureTextEntry={password !== null}
+                            value={password}
+                            set={setPassword}
                         />
 
                         <InputBox 
                             label="Confirm  Password"
                             placeholder="Password"
                             icon="key-outline"
+                            secureTextEntry={password !== null}
+                            value={confirmPwd}
+                            set={setConfirmPwd}
                         />
 
                         <View style={styles.loginButton}>
@@ -73,7 +121,7 @@ const SignupScreen = (props) => {
                             <CustomButton 
                                 title="REGISTER"
                                 icon="arrow-forward"
-                                onButtonPress={handleClick}
+                                onButtonPress={authHandler}
                                 isLoading={isLoading}
                             />
 
