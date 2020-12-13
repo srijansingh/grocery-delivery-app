@@ -3,10 +3,12 @@ import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import Color from '../../../Constant/Color'
 import FontFamily from '../../../Constant/FontFamily'
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TouchableRipple } from 'react-native-paper'
 import { TouchableNativeFeedback } from 'react-native-gesture-handler'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
-
+import { useDispatch, useSelector } from 'react-redux'
+import * as cartAction from '../../../Store/action/cart'
 const {width, height} = Dimensions.get("screen")
 
 const ProductVerticalComponent = (props) => {
@@ -15,6 +17,71 @@ const ProductVerticalComponent = (props) => {
     if(props.discount >= 1){
         discount = props.discount.toFixed(0)
     }
+
+    const userid = useSelector(state => state.auth.userId);
+    const availableProduct = useSelector(state => state.products.availableProduct);
+    const productDetails = availableProduct.find(product => product._id === props.id);
+
+    const item = useSelector(state => state.cart.items);
+    const dispatch = useDispatch();
+
+    let addButton;
+
+    if(item[props.id]){
+        addButton = (
+            <View style={styles.countContainer}>
+                <TouchableOpacity  
+                 activeOpacity={0.8} 
+                onPress={() => {
+                    dispatch(cartAction.removeFromCart(props.id))
+                }}
+                style={styles.icon}>
+                    <MaterialCommunityIcon
+                        name="minus"
+                        size={15}
+                        color={'white'}
+                    />
+                </TouchableOpacity>
+                <View style={styles.countButton}>
+            <Text style={styles.countButtonText}>{item[props.id].quantity}</Text>
+                </View>
+                <TouchableOpacity  
+                activeOpacity={0.8} 
+                onPress={() => {
+                   dispatch(cartAction.addToCart(productDetails, userid))
+               }}
+                style={styles.icon}>
+                    <MaterialIcons 
+                        name="add"
+                        size={15}
+                        color={'white'}
+                    />
+                </TouchableOpacity>
+            </View>  
+        )
+    }else{
+        addButton=(
+            <TouchableOpacity 
+            activeOpacity={0.8}
+            onPress={() => {
+                dispatch(cartAction.addToCart(productDetails, userid))
+            }}
+                style={styles.buttonContainer}
+            >
+                <View style={styles.addButton}>
+                    <Text style={styles.addButtonText}>ADD</Text>
+                </View>
+                <View  style={styles.icons}>
+                    <MaterialIcons 
+                        name="add"
+                        size={15}
+                        color={'white'}
+                    />
+                </View>
+            </TouchableOpacity>  
+        )
+    }
+
 
     return (
        
@@ -87,52 +154,9 @@ const ProductVerticalComponent = (props) => {
 
             </View>
             
-            <View style={{
-                    height:30,
-                    width:'100%',
-                    justifyContent:'flex-start',
-                    alignItems:'flex-end',
-                    paddingHorizontal:2
-                }}>
-                    <View style={{
-                        width:"100%",
-                        height:'100%',
-                        backgroundColor:'orange',
-                        justifyContent:'center',
-                        alignItems:'flex-end',
-                        borderRadius:5,
-                        overflow:'hidden',
-                        flexDirection:'row'
-                    }}>
-                        <View style={{
-                                width:'80%',
-                                height:'100%',
-                                backgroundColor:Color.button,
-                                justifyContent:'center',
-                                alignItems:'center',
-                        }}>
-                            <Text style={{
-                                color:'white',
-                                fontSize:12,
-                                fontFamily:FontFamily.bold
-                            }}>ADD</Text>
-                        </View>
-                        <View  style={{
-                                width:'20%',
-                                height:'100%',
-                                backgroundColor:Color.plus,
-                                justifyContent:'center',
-                                alignItems:'center',
-                                elevation:1
-                        }}>
-                            <MaterialIcons 
-                                name="add"
-                                size={18}
-                                color={'white'}
-                            />
-                        </View>
-                    </View>    
-                </View>
+            <View style={styles.footer}>
+                {addButton}          
+            </View>
         </TouchableOpacity>
        
        
@@ -228,6 +252,76 @@ const styles = StyleSheet.create({
         fontSize:14,
         fontFamily:FontFamily.regular,
         color:Color.icon
+    },
+    footer:{
+        marginVertical:5,
+        height:30,
+        width:'100%',
+        justifyContent:'flex-start',
+        alignItems:'flex-end',
+        paddingHorizontal:2
+    },
+    buttonContainer:{
+        width:"100%",
+        height:'100%',
+        backgroundColor:Color.button,
+        justifyContent:'center',
+        alignItems:'flex-end',
+        borderRadius:5,
+        overflow:'hidden',
+        flexDirection:'row'
+    },
+    countContainer:{
+        width:"100%",
+        height:'100%',
+        backgroundColor:'white',
+        justifyContent:'center',
+        alignItems:'flex-end',
+        borderRadius:5,
+        overflow:'hidden',
+        flexDirection:'row'
+    },
+    addButton: {
+        width:'80%',
+        height:'100%',
+        backgroundColor:Color.button,
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    countButton:{
+        width:'60%',
+        height:'100%',
+        backgroundColor:'white',
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    addButtonText:{
+        color:'white',
+        fontSize:12,
+        fontFamily:FontFamily.bold
+    },
+    countButtonText:{
+        color:Color.button,
+        fontSize:15,
+        fontFamily:FontFamily.bold
+    },
+    icons:{
+        width:'20%',
+        height:'100%',
+        backgroundColor:Color.plus,
+        justifyContent:'center',
+        alignItems:'center',
+        elevation:1,
+        borderRadius:5
+    },
+    icon:{
+        width:'20%',
+        height:'100%',
+        backgroundColor:Color.button,
+        justifyContent:'center',
+        alignItems:'center',
+        elevation:1,
+        borderRadius:5
     }
 })
 

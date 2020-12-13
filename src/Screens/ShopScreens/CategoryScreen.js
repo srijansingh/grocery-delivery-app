@@ -12,6 +12,7 @@ import SubcategoryComponent from './Component/SubcategoryComponent';
 const {width, height} = Dimensions.get("screen");
 
 import * as subcategoryAction from '../../Store/action/subcategory'
+import CartButton from '../../Component/CartButton';
 
 const CategoryScreen = ({route, navigation}) => {
     const { title,id,subId, subIndex } = route.params;
@@ -20,6 +21,10 @@ const CategoryScreen = ({route, navigation}) => {
     const [isProductLoading, setProductLoading] = useState(false)
     const [sub, setSub] = useState(subId)
     const [activeIndex, setActiveIndex] = useState(subIndex)
+
+    const cartSellingPrice = useSelector(state => state.cart.totalAmount);
+    const cartCostPrice = useSelector(state => state.cart.totalCost);
+    const cartTotalItem= useSelector(state => state.cart.totalItem);
 
 
     const availableProduct = useSelector(state => state.products.availableProduct);
@@ -167,11 +172,17 @@ const CategoryScreen = ({route, navigation}) => {
                        loader
                     :
                     <FlatList 
+                    style={{marginBottom:230}}
                     data={productSubcategory}
                     keyExtractor={item => item._id}
                     renderItem={itemData => (
                      
                         <ProductHorizontalComponent 
+                        marginTop={6}
+                        marginBottom={2}
+                        borderRadius={5}
+                        marginHorizontal="2%"
+                        width={'96%'}
                             onButtonPress={() => {
                                 navigation.navigate('ProductDetail',{
                                     category:itemData.item.category,
@@ -198,6 +209,15 @@ const CategoryScreen = ({route, navigation}) => {
                 </View>
                
                 </Animated.View>
+                
+            
+                <CartButton 
+                    onButtonPress={() => (
+                        navigation.navigate('CartStack')
+                    )}
+                />
+                    
+
             </View>
            
 

@@ -26,16 +26,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as productAction from '../../Store/action/product';
 import * as categoryAction from '../../Store/action/category';
 import * as authAction from '../../Store/action/auth';
-
-
+import BackButton from '../../Component/BackButton';
+import BadgeButton from '../../Component/BadgeButton';
+import CartButton from '../../Component/CartButton';
+import * as cartAction from '../../Store/action/cart'
 const {width, height} = Dimensions.get("screen")
 
 const HomeScreen = (props) => {
-
+  const dispatch = useDispatch();
  
   const cartCount = useSelector(state => state.cart.totalItem );
-
-
+  
+  
   // const handleClick = (list) => {
   //   alert(list)
   // }
@@ -51,7 +53,7 @@ const HomeScreen = (props) => {
   const [isCategoryLoading, setCategoryLoading] = useState(false)
 
   const categoryData = useSelector(state => state.categories.availableCategory);
-  const dispatch = useDispatch();
+
 
   const loadCategory = useCallback(async () => {
     setError(null)
@@ -203,7 +205,6 @@ useEffect(() => {
     }}>
       <ImageBackground 
               index={index}
-              
               style={{
                 height:'100%',
                 maxWidth:'100%',
@@ -245,15 +246,47 @@ useEffect(() => {
           alignItems:'center',
          
         }}>
-              <StatusBar backgroundColor={'white'} barStyle="dark-content" />  
+              <StatusBar backgroundColor={'white'} barStyle="dark-content" /> 
+              <View style={styles.header}>
+                    <View style={styles.headerText} >
+                        <BackButton 
+                            goBack={() => {props.navigation.toggleDrawer()}}
+                            color={Color.primary}
+                            name="menu"
+                        />
+                        <View>
+                            <Text style={styles.title}>Shoppitant</Text>
+                        </View>
+                    </View>
+
+                    <View style={{
+                      flexDirection:'row'
+                    }}>
+                    <BackButton 
+                       goBack={() => {props.navigation.jumpTo('SearchStack', {id:'wwws'})}}
+                        color={Color.icon}
+                        name="search"
+                    />
+
+                    <BadgeButton 
+                       goBack={() => {props.navigation.jumpTo('CartStack')}}
+                        color={Color.icon}
+                        name="shopping-cart"
+                        count={cartCount}
+                    />
+                   
+                    </View>
+                </View> 
               <ScrollView style={{width:width, paddingVertical:5}} showsVerticalScrollIndicator={false} >
+
+              
+
+
                 <View style={styles.swiper}>
                 <Swiper horizontal={true} loop={true} autoplay={true} activeDotColor={Color.accent} >
                   {isSwiperLoading ? swiperLoading : swipers}
                 </Swiper>
                 </View>
-
-      <View><Text>{cartCount}</Text></View>
 
                 
                 <LinearGradient colors={['#FF4600','#FF4600', Color.accent,'#FD7600',]} style={styles.offer}>
@@ -353,6 +386,9 @@ useEffect(() => {
                     </View>
 
               </ScrollView>
+
+              
+             
         </View>
     )
 }
@@ -360,51 +396,28 @@ useEffect(() => {
 export default HomeScreen;
 
 
-export const screenOptions = navData => {
-  
-
-    return {
-    headerTitle:() => (
-        <View style={{alignSelf:'flex-start' }}>
-            <Text style={{fontSize:20,color:Color.icon,  fontFamily:Font.black}}>Dholpurshare</Text>
-        </View>
-    ),
-      headerLeft: () => (
-        <HeaderButtons HeaderButtonComponent={HeaderButton}>
-          <Item
-            title="Menu"
-            iconName= 'menu'
-            onPress={() => {
-              navData.navigation.toggleDrawer();
-            }}
-          />
-        </HeaderButtons>
-      ),
-      headerRight: () => (
-        <HeaderButtons HeaderButtonComponent={HeaderButton}>
-        <Item
-            title="Search"
-            iconName='search' 
-            onPress={() => {
-              navData.navigation.navigate('SearchStack');
-            }}
-          />
-        <Item
-            title="Cart"
-            iconName='shopping-cart' 
-            onPress={() => {
-              navData.navigation.navigate('CartStack');
-            }}
-          />
-        </HeaderButtons>
-      )
-    };
-  };
-  
-
-
-
 const styles = StyleSheet.create({
+  header:{
+    flexDirection:'row',
+    height:55,
+    width:'100%',
+    backgroundColor:"white",
+    justifyContent:'space-between',
+    alignItems:'center',
+    elevation:2
+},
+headerText:{
+    
+    flexDirection:'row',
+    justifyContent:'flex-start',
+    alignItems:'center'
+},
+title:{
+  marginLeft:8,
+  fontSize:20,
+  color:Color.icon,  
+  fontFamily:Font.black
+},
   swiper:{
     backgroundColor:'#fff',
     height:250,

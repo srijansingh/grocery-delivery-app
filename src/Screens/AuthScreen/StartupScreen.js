@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { StyleSheet,ActivityIndicator, View } from 'react-native'
+import { StyleSheet,ActivityIndicator, View, StatusBar } from 'react-native'
 import  AsyncStorage  from '@react-native-async-storage/async-storage';
 import color from "../../Constant/Color";
 import * as authAction from "../../Store/action/auth";
@@ -28,11 +28,14 @@ const StartupScreen = (props) => {
             const expiryTime = expirationDate.getTime() - new Date().getTime();
             dispatch(authAction.authenticate(userId, token, name, email, expiryTime));
         }
-            tryLogin()
+            setTimeout(() => {
+                tryLogin()
+            }, 3000);
     }, [dispatch])
 
     return (
         <View style={styles.screen}>
+             <StatusBar backgroundColor="white" barStyle="dark-content" />
             <ActivityIndicator size="large" color={color.primary} />
         </View>
     )

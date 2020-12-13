@@ -10,11 +10,14 @@ import { URL } from '../../../BASE_URL';
 import ProductVerticalComponent from './Component/ProductVerticalComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import * as cartAction from '../../Store/action/cart'
+import BadgeButton from '../../Component/BadgeButton';
+import CartButton from '../../Component/CartButton';
 
 const {height, width} = Dimensions.get("screen")
 
 const ProductDetailScreen = ({route, navigation}) => {
     const userid = useSelector(state => state.auth.userId);
+    
     const {id, title, category, subcategory} = route.params;
     const [isDescriptionShow, setDescriptionShown] = useState(true);
 
@@ -32,7 +35,7 @@ const ProductDetailScreen = ({route, navigation}) => {
     const productSubcategory = availableProduct.filter(product => product.subcategory === subcategory);
     
     const cartItem = useSelector(state => state.cart.items);
-    const cartCount = useSelector(state => state.cart.totalAmount);
+    const cartCount = useSelector(state => state.cart.totalItem);
     const item = useSelector(state => state.cart.items);
 
     let addButton;
@@ -109,6 +112,7 @@ const ProductDetailScreen = ({route, navigation}) => {
                     title:item.title
                 })
             }}
+            id={item._id}
             title={item.title}
             sp={item.sellingprice}
             cp={item.costprice}
@@ -143,10 +147,19 @@ const ProductDetailScreen = ({route, navigation}) => {
                     <View>
                         <Text style={styles.title}>{title.toUpperCase()}</Text>
                     </View>
+
+                    
                 </View>
+                <BadgeButton
+                       goBack={() => {props.navigation.jumpTo('SearchStack')}}
+                        color={Color.icon}
+                        name="shopping-cart"
+                        count={cartCount}
+                    />
             </View>
         <ScrollView 
             ref={refContainer}
+            style={{paddingBottom:100}}
         >
         <View>
             <View style={styles.imageBox}>
@@ -211,6 +224,8 @@ const ProductDetailScreen = ({route, navigation}) => {
                 
             </View>
 
+           {
+               subcategory &&
            
                 <View style={{marginBottom:8,backgroundColor:'white'}} >
                     <HeaderTitle 
@@ -234,10 +249,14 @@ const ProductDetailScreen = ({route, navigation}) => {
     
                 </View>
 
-                
+           }
 
+                
+           {
+               subcategory &&
+           
             
-                <View style={{marginBottom:8,backgroundColor:'white'}} >
+                <View style={{marginBottom:50,backgroundColor:'white'}} >
                     <HeaderTitle 
                         title="Frequently Bought together"
                         themeColor="#FF4600"
@@ -258,8 +277,14 @@ const ProductDetailScreen = ({route, navigation}) => {
                     />
     
                 </View>
+}
         </View>
         </ScrollView>
+        <CartButton
+                    onButtonPress={() => (
+                        navigation.navigate('CartStack')
+                    )}
+                />
         </>
     )
 }

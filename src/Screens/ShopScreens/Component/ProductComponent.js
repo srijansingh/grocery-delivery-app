@@ -16,6 +16,7 @@ const ProductComponent = (props) => {
     const productDetails = availableProduct.find(product => product._id === props.id);
 
     const item = useSelector(state => state.cart.items);
+   
     const dispatch = useDispatch();
 
 

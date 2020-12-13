@@ -4,7 +4,7 @@ import { TouchableRipple } from 'react-native-paper';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import Color from '../Constant/Color';
 
-const BackButton = (props) => {
+const BadgeButton = (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.subContainer}>
@@ -19,11 +19,14 @@ const BackButton = (props) => {
                     
                 </TouchableRipple>
             </View>
+            <View style={styles.badge}>
+                <Text style={styles.badgeText}>{props.count}</Text>
+            </View>
         </View>
     )
 }
 
-export default BackButton
+export default BadgeButton
 
 const styles = StyleSheet.create({
     container:{
@@ -47,5 +50,21 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',  
        
+    },
+    badge:{
+        position:'absolute',
+        top:10,
+        right:10,
+        backgroundColor:Color.button,
+        width:15,
+        height:15,
+        borderRadius:50,
+        justifyContent:'center',
+        alignItems:'center'
+
+    },
+    badgeText:{
+        fontSize:9,
+        color:'white'
     }
 })

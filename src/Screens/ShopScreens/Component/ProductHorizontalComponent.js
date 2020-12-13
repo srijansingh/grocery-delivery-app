@@ -90,15 +90,15 @@ const ProductHorizontalComponent = (props) => {
         onPress={() => {}}
         style={{
             height:160,
-            marginTop:6,
-            marginBottom:2,
-            width:'96%',
-            marginHorizontal:'2%',
+            marginTop:props.marginTop,
+            marginBottom:props.marginBottom,
+            width:width,
+            marginHorizontal:props.marginHorizontal,
             backgroundColor:'white',
             borderBottomWidth:1,
             borderBottomColor:'#f1f1f1',
             elevation:1,
-            borderRadius:5,
+            borderRadius:props.borderRadius,
             
             overflow:'hidden'
             

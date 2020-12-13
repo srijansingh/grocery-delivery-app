@@ -1,10 +1,11 @@
-import { ADD_TO_CART, REMOVE_FROM_CART } from "../action/cart";
+import { ADD_TO_CART, GET_CART, REMOVE_FROM_CART } from "../action/cart";
 import CartItem from "../model/cart";
 
 
 const initialState = {
     items:{},
     totalAmount:0,
+    totalCost:0,
     totalItem :0
 }
 
@@ -51,11 +52,10 @@ export default (state = initialState, action) => {
                 ...state,
                 items:{...state.items, [addeProduct._id]:updatedNewCartItem},
                 totalAmount: parseInt(state.totalAmount) + parseInt(sellingprice),
+                totalCost: parseInt(state.totalCost) + parseInt(costprice),
                 totalItem: state.totalItem + 1
             }; 
-
             
-
         case REMOVE_FROM_CART:
             const selectedItem = state.items[action.pid];
             const currentQty = state.items[action.pid].quantity;
@@ -80,9 +80,9 @@ export default (state = initialState, action) => {
                 ...state,
                 items:updatedCartItems,
                 totalAmount:parseInt(state.totalAmount) - parseInt(selectedItem.sellingprice),
+                totalCost: parseInt(state.totalCost) - parseInt(selectedItem.costprice),
                 totalItem:state.totalItem - 1
-            };
-        
+            }
             // case ADD_ORDER:
             //     return initialState;
             // case DELETE_PRODUCT:

@@ -1,6 +1,6 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen, { screenOptions } from '../../Screens/ShopScreens/HomeScreen';
+import HomeScreen from '../../Screens/ShopScreens/HomeScreen';
 import CategoryScreen from '../../Screens/ShopScreens/CategoryScreen';
 import Colors from "../../Constant/Color"
 import ProductDetailScreen from '../../Screens/ShopScreens/ProductDetailScreen';
@@ -22,7 +22,9 @@ const HomeNavigator = () => {
             <Stack.Screen
                 name="Home"
                 component={HomeScreen}
-                options={screenOptions}
+                options = {{
+                    headerShown:false
+                }}
             />
             <Stack.Screen 
                 name="Category" 
