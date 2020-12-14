@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableOpacityBase, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux';
 import BackButton from '../../Component/BackButton';
@@ -8,6 +8,7 @@ import FontFamily from '../../Constant/FontFamily';
 import ProductHorizontalComponent from '../ShopScreens/Component/ProductHorizontalComponent';
 import NocartItem from './Component/NocartItem';
 import * as addressAction from '../../Store/action/address'
+import ModalLoader from '../../Component/ModalLoader';
 
 const CartScreen = (props) => {
     const dispatch = useDispatch();
@@ -32,14 +33,18 @@ const CartScreen = (props) => {
     });
     //-----------------------aDDRESS ------------------------
 
+    const [isAddressLoading, setIsAddressLoading] = useState(false)
     const loadCategory = useCallback(async () => {
+        setIsAddressLoading(true)
         try{
             await dispatch(addressAction.fetchAddress());
+            setIsAddressLoading(false)
         }catch(err){
            console.log(err)
+           setIsAddressLoading(false)
         }
       
-    }, [dispatch]);
+    }, [dispatch, setIsAddressLoading]);
     
     useEffect(() => {
         loadCategory();
@@ -112,7 +117,7 @@ const CartScreen = (props) => {
 
     let mycart;
     if(cartTotalItem < 1){
-        mycart = <NocartItem />
+        mycart = <NocartItem goToHome={() => props.navigation.navigate('Home')} />
     }else{
         mycart = (
             <>
@@ -219,6 +224,9 @@ const CartScreen = (props) => {
                     />
             </View>
             {mycart}
+            <ModalLoader 
+                visible={isAddressLoading}
+            />
         </>
     )
 }

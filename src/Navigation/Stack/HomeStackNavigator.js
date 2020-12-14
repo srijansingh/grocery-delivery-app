@@ -5,7 +5,12 @@ import CategoryScreen from '../../Screens/ShopScreens/CategoryScreen';
 import Colors from "../../Constant/Color"
 import ProductDetailScreen from '../../Screens/ShopScreens/ProductDetailScreen';
 
-
+import CartScreen from '../../Screens/CartScreen/CartScreen';
+import AddressScreen from '../../Screens/CartScreen/AddressScreen';
+import CheckoutScreen from '../../Screens/CartScreen/CheckoutScreen';
+import SelectAddress from '../../Screens/CartScreen/SelectAddress';
+import ChooseAddress from '../../Screens/CartScreen/ChooseAddress';
+import ConfirmationScreen from '../../Screens/CartScreen/ConfirmationScreen';
 
 const Stack = createStackNavigator();
 
@@ -41,6 +46,54 @@ const HomeNavigator = () => {
                 options = {{
                     headerShown:false
                 }}
+            />
+
+            <Stack.Screen
+                name="CartScreen"
+                component={CartScreen}
+                options = {{
+                  headerShown:false
+              }}
+            />
+
+            <Stack.Screen
+                name="SelectAddress"
+                component={SelectAddress}
+                options = {{
+                  headerShown:false
+              }}
+            />  
+
+            <Stack.Screen
+                name="ChooseAddress"
+                component={ChooseAddress}
+                options = {{
+                  headerShown:false
+              }}
+            />    
+
+            <Stack.Screen
+                name="Checkout"
+                component={CheckoutScreen}
+                options = {{
+                  headerShown:false
+              }}
+            />
+
+            <Stack.Screen
+                name="Address"
+                component={AddressScreen}
+                options = {{
+                  headerShown:false
+              }}
+            />
+
+            <Stack.Screen
+                name="Confirmation"
+                component={ConfirmationScreen}
+                options = {{
+                  headerShown:false
+              }}
             />
             
       </Stack.Navigator>

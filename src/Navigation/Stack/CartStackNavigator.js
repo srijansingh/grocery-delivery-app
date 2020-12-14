@@ -6,6 +6,7 @@ import AddressScreen from '../../Screens/CartScreen/AddressScreen';
 import CheckoutScreen from '../../Screens/CartScreen/CheckoutScreen';
 import SelectAddress from '../../Screens/CartScreen/SelectAddress';
 import ChooseAddress from '../../Screens/CartScreen/ChooseAddress';
+import ConfirmationScreen from '../../Screens/CartScreen/ConfirmationScreen';
 const Stack = createStackNavigator();
 
 const defaultNavOptions = {
@@ -54,6 +55,14 @@ const CartNavigator = () => {
             <Stack.Screen
                 name="Address"
                 component={AddressScreen}
+                options = {{
+                  headerShown:false
+              }}
+            />
+
+            <Stack.Screen
+                name="Confirmation"
+                component={ConfirmationScreen}
                 options = {{
                   headerShown:false
               }}

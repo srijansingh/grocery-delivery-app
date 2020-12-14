@@ -3,7 +3,7 @@ import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import Color from '../../../Constant/Color'
 import FontFamily from '../../../Constant/FontFamily'
 
-const NocartItem = () => {
+const NocartItem = (props) => {
     return (
         <ScrollView style={{flex:1, backgroundColor:'white'}}>
                     <View style={{marginVertical:50,justifyContent:'space-around', alignItems:'center'}}>
@@ -32,7 +32,9 @@ const NocartItem = () => {
                                 color:Color.icon,
                                 paddingVertical:4
                             }}>Your favorite items are just few click away</Text>
-                            <TouchableOpacity style={{
+                            <TouchableOpacity 
+                            onPress={props. goToHome}
+                            style={{
                                 height:40,
                                 backgroundColor:Color.button,
                                 justifyContent:'center',

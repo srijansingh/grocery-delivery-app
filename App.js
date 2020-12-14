@@ -11,15 +11,10 @@ import subcategoryReducer from './src/Store/reducer/subcategory';
 import authReducer from './src/Store/reducer/auth';
 import cartReducer from './src/Store/reducer/cart';
 import addressReducer from './src/Store/reducer/address';
-import { init } from './src/Store/sqlite/db';
+import orderReducer from './src/Store/reducer/order'
 
-init()
-.then((response) => {
-  console.log('Success ', response)
-})
-.catch(err => {
-  console.log("Failed ", err)
-})
+
+
 
 const rootReducer = combineReducers({
   products:productReducer,
@@ -27,7 +22,8 @@ const rootReducer = combineReducers({
   subcategories:subcategoryReducer,
   auth:authReducer,
   cart:cartReducer,
-  address:addressReducer
+  address:addressReducer,
+  order:orderReducer
 })  
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk))

@@ -117,23 +117,16 @@ const AddressScreen = (props) => {
                 key={index}
                 style={styles.singleLocality}
             > 
-            {list.Name ===  locality ? 
+          
                 <View>
-                    <MaterialIcons 
-                        name="check-box"
-                        color={Color.green}
+                    <MaterialIcons
+                        name={list.Name ===  locality ?  "radio-button-checked" : "radio-button-unchecked"}
+                        color={list.Name ===  locality  ? Color.button : Color.icon}
                         size={20}
+
                     />
                 </View>
-                :
-                <View>
-                    <MaterialIcons 
-                        name="check-box-outline-blank"
-                        color={Color.icon}
-                        size={20}
-                    />
-                </View>    
-        }
+                
                 <Text style={styles.localityText}>{list.Name}</Text>
             </TouchableOpacity>
         )

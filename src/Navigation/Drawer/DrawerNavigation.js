@@ -29,11 +29,11 @@ const DrawerNavigation = () => {
               component={SearchScreen} 
               options={{swipeEnabled:false}}
             />
-            <Drawer.Screen 
+            {/* <Drawer.Screen 
               name="CartStack" 
               component={CartNavigator} 
               options={{swipeEnabled:false}}
-            />
+            /> */}
             <Drawer.Screen 
               name="UserStack" 
               component={UserNavigator} 

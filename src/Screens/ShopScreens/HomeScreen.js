@@ -269,7 +269,7 @@ useEffect(() => {
                     />
 
                     <BadgeButton 
-                       goBack={() => {props.navigation.jumpTo('CartStack')}}
+                       goBack={() => {props.navigation.navigate('CartScreen')}}
                         color={Color.icon}
                         name="shopping-cart"
                         count={cartCount}

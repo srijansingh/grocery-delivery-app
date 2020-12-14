@@ -71,7 +71,6 @@ export const addAddress = (data) => {
         }
 
         const resData = await response.json();
-        console.log("signup ",resData.data)
 
         dispatch({type:ADD_ADDRESS, address:resData.data })
     }

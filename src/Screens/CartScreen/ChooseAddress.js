@@ -11,7 +11,6 @@ import AlertComponent from './Component/AlertComponent';
 const ChooseAddress = (props) => {
     const {selectedId, add} = props.route.params;
     const addressData = useSelector(state => state.address.address);
-    console.log(addressData[0].id)
     const [isLoading, setIsLoading] = useState(true)
     const [selected, setSelected] = useState()
     const [error, setError] = useState(null);

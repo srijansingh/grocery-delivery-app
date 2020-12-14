@@ -1,12 +1,62 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import BackButton from '../../Component/BackButton';
 import Color from '../../Constant/Color';
 import FontFamily from '../../Constant/FontFamily';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import * as orderAction from '../../Store/action/order';
+import ModalLoader from '../../Component/ModalLoader';
+
 const CheckoutScreen = (props) => {
     const {selectedId} = props.route.params;
+    
+    const dispatch = useDispatch();
+    const [orderid, setOrderid] = useState('SHOID'+Math.random().toString(36).substr(2, 10).toUpperCase());
+    const [isLoading, setIsLoading] = useState(false)
+    const addressData = useSelector(state => state.address.address);
+    const selectedAddress = addressData.find(address => address.id === selectedId);
+
+    
+
+    useEffect(() => {
+        if( cartTotalItem < 1){
+            props.navigation.navigate('Home')
+        }
+    }, [])
+
+    const cartItem = useSelector(state => {
+        const listItem = [];
+        for(const key in state.cart.items){
+            listItem.push({
+                productid:key,
+                title:state.cart.items[key].title,
+                imageurl:state.cart.items[key].imageurl,
+                costprice:state.cart.items[key].costprice,
+                sellingprice:state.cart.items[key].sellingprice,
+                quantity:state.cart.items[key].quantity,
+                total:state.cart.items[key].total
+            })
+        }
+        return listItem.sort((a,b)=>a.productid > b.productid ? 1 : -1);
+    });
+
+
+    const submitHandler = async () => {
+        
+        setIsLoading(true)
+        try {
+            await dispatch(orderAction.addOrder(orderid, cartItem, cartSellingPrice, cartTotalItem, selectedAddress ))
+            setIsLoading(false)
+            props.navigation.navigate('Confirmation', {orderid:orderid})
+        }
+        catch(err){
+            console.log(err)
+            setIsLoading(false)
+        }
+    }
+
+
     const cartSellingPrice = useSelector(state => state.cart.totalAmount);
     const cartCostPrice = useSelector(state => state.cart.totalCost);
     const cartTotalItem= useSelector(state => state.cart.totalItem);
@@ -148,6 +198,7 @@ const CheckoutScreen = (props) => {
                 </View>  
             </View>
                 </ScrollView>
+               
                 <View style={{
                 height:60,
                 backgroundColor:'white',
@@ -155,9 +206,7 @@ const CheckoutScreen = (props) => {
                 justifyContent:'center'
             }}>
                 <TouchableOpacity 
-                onPress={() => {
-                    props.navigation.navigate('Checkout')
-                }}
+                onPress={submitHandler}
                 activeOpacity={0.9}
                 style={{
                     backgroundColor:Color.button,
@@ -170,6 +219,10 @@ const CheckoutScreen = (props) => {
                     <Text style={{color:'white', fontSize:16, fontFamily:FontFamily.bold}}>Place Now</Text>
                 </TouchableOpacity>
             </View>
+
+            <ModalLoader 
+                    visible={isLoading || cartTotalItem < 1}
+                />
         </>
         )
 }
