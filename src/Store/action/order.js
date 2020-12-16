@@ -16,7 +16,9 @@ export const fetchOrder = () => {
             if(!response.ok){
                 throw newError('Something went wrong')
             }
-          const resData = await response.json();
+          const data = await response.json();
+          const resData = data.data
+         
           const loadedOrder = [];
 
           for(const key in resData){
@@ -28,7 +30,8 @@ export const fetchOrder = () => {
                 resData[key].totalitems,
                 resData[key].address,
                 resData[key].status,
-                resData[key].createdAt
+                resData[key].createdAt,
+                resData[key].updatedAt
               ));
           }
           

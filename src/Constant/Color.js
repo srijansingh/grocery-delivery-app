@@ -5,5 +5,6 @@ export default {
     icon:'#5B5B5B',
     button:'#e96125',
     plus:'#bf5120',
-    green:'#4cae1a'
+    green:'#4cae1a',
+    darkgreen:'#20bd99'
 }

@@ -1,20 +1,17 @@
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import React, { useState } from 'react'
-import { StyleSheet,  View } from 'react-native';
+import { StyleSheet,  View, Image, TouchableOpacity,  Text, } from 'react-native';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import {
-    Avatar,
     Title,
-    Caption,
-    Paragraph,
     Drawer,
-    Text,
-    TouchableRipple,
-    Switch
 } from 'react-native-paper'
 import Color from '../../Constant/Color';
 import { useDispatch, useSelector } from 'react-redux';
 import * as authAction from '../../Store/action/auth';
+import LinearGradient from 'react-native-linear-gradient';
+import FontFamily from '../../Constant/FontFamily';
+import TabComponent from './TabComponent';
 
 const DrawerContent = (props) => {
     const [isDark, setIsDark] = useState(false);
@@ -32,103 +29,127 @@ const DrawerContent = (props) => {
         <View style={{flex:1}}> 
             <DrawerContentScrollView {...props} > 
                 <View style={styles.drawerContent}>
-                    <View style={styles.userInfoSection} >
+                   <TouchableOpacity activeOpacity={0.8}>
+                   <LinearGradient colors={['#fff','#a6a6a6','#000']}  style={styles.userInfoSection} >
 
                         <View style={styles.userProfileSection} >
-                            <Avatar.Image
-                                source={{
-                                    uri : 'https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png'
+                            <View style={{
+                                height:70,
+                                width:70,
+                                backgroundColor:'white',
+                                borderRadius:5,
+                                justifyContent:'center',
+                                alignItems:'center'
+                            }}>
+                            <Image
+                                source={require('../../../asset/images/avatar.png')}
+                                style={{
+                                    height:40,
+                                    width:40,
+                                    marginVertical:10
                                 }}
-                                size={60}
                             />
-                        
-
-                            <View style={{marginLeft:10}} >
-                            <Title style={styles.title}>{name}</Title>
-                            <Caption style={styles.caption}>{email}</Caption>
                             </View>
+
+
+                            <View  >
+                                <Title style={styles.title}>{name}</Title>
+                            </View>                                
                         </View>
 
-                    </View>
+                        </LinearGradient>
+                   </TouchableOpacity>
                     
-                    <Drawer.Section style={styles.drawerSection} >
-                        <DrawerItem 
-                            icon={({color, size}) => (
-                                <MaterialIcons name="home" size={size} color={color} />
-                            )}
-                            label="Home"
-                            onPress={() => {
-                                props.navigation.navigate('HomeStack')
-                            }}
-                        />
+                    <View style={styles.drawerSection} >
+                        <TouchableOpacity 
+                                onPress={() => {
+                                    props.navigation.navigate('HomeStack')
+                                }}
+                                style={styles.tab}
+                            >
+                            <View style={styles.tabIcon}><MaterialIcons name="store" size={20} color={Color.icon} /></View>
+                            <View style={styles.tabText}><Text style={{fontSize:16, fontFamily:FontFamily.regular, color:Color.icon}}>Store</Text></View>
+                        </TouchableOpacity>
 
-                    <DrawerItem 
-                            icon={({color, size}) => (
-                                <MaterialIcons name="account-circle" size={size} color={color} />
-                            )}
-                            label="Profile"
-                            onPress={() => {
-                                props.navigation.navigate('UserStack')
-                            }}
-                        />
-
-                        <DrawerItem 
-                            icon={({color, size}) => (
-                                <MaterialIcons name="favorite" size={size} color={color} />
-                            )}
-                            label="Wishlist"
-                            onPress={() => {
-                                props.navigation.navigate('Fav')
-                            }}
-                        />
-
-                        <DrawerItem 
-                            icon={({color, size}) => (
-                                <MaterialIcons name="shopping-cart" size={size} color={color} />
-                            )}
-                            label="Cart"
-                            onPress={() => {
-                                props.navigation.navigate('CartStack')
-                            }}
-                        />
-
-                        <DrawerItem 
-                            icon={({color, size}) => (
-                                <MaterialIcons name="call" size={size} color={color} />
-                            )}
-                            label="Support"
-                            onPress={() => {}}
-                        />
+                        <TouchableOpacity 
+                                onPress={() => {
+                                    props.navigation.navigate('UserStack')
+                                }}
+                                style={styles.tab}
+                            >
+                            <View style={styles.tabIcon}><MaterialIcons name="account-circle" size={20} color={Color.icon} /></View>
+                            <View style={styles.tabText}><Text style={{fontSize:16, fontFamily:FontFamily.regular, color:Color.icon}}>My Profile</Text></View>
+                        </TouchableOpacity>
                         
-                    </Drawer.Section>
 
-                    <Drawer.Section title="Preferences" >
-                                <TouchableRipple onPress={() => toggleTheme()} >
-                                    <View style={styles.preference} pointerEvents="none" >
-                                        <Text>Dark Theme</Text>
-                                        <Switch value={isDark} color={Color.primary} />
-                                    </View>
-                                </TouchableRipple>
-                    </Drawer.Section>
+                        <TouchableOpacity 
+                             onPress={() => {
+                                props.navigation.navigate('CartScreen')
+                            }}
+                            style={styles.tab}
+                        >
+                            <View style={styles.tabIcon}><MaterialIcons name="shopping-cart" size={20} color={Color.icon} /></View>
+                            <View style={styles.tabText}><Text style={{fontSize:16, fontFamily:FontFamily.regular, color:Color.icon}}>Cart</Text></View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity 
+                             onPress={() => {
+                                props.navigation.navigate('OrderStack')
+                            }}
+                            style={styles.tab}
+                        >
+                            <View style={styles.tabIcon}><MaterialIcons name="border-all" size={20} color={Color.icon} /></View>
+                            <View style={styles.tabText}><Text style={{fontSize:16, fontFamily:FontFamily.regular, color:Color.icon}}>Orders</Text></View>
+                        </TouchableOpacity>
+
+                        <View style={{
+                            paddingVertical:10
+                        }}>
+                            <TouchableOpacity 
+                                onPress={() => {
+                                    props.navigation.navigate('Faqs')
+                                }}
+                                style={styles.minitab}
+                            >
+                                <View style={styles.tabIcon}></View>
+                                <View style={styles.tabText}><Text style={{fontSize:12, fontFamily:FontFamily.regular, color:Color.icon}}>FAQS</Text></View>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity 
+                                onPress={() => {
+                                    props.navigation.navigate('Aboutus')
+                                }}
+                                style={styles.minitab}
+                            >
+                                <View style={styles.tabIcon}></View>
+                                <View style={styles.tabText}><Text style={{fontSize:12, fontFamily:FontFamily.regular, color:Color.icon}}>CONTACT US</Text></View>
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                                onPress={() => {
+                                    props.navigation.navigate('HomeStack')
+                                }}
+                                style={styles.minitab}
+                            >
+                                <View style={styles.tabIcon}></View>
+                                <View style={styles.tabText}><Text style={{fontSize:12, fontFamily:FontFamily.regular, color:Color.icon}}>SHARE</Text></View>
+                            </TouchableOpacity>
+
+                          
+                        </View>
+
+
+                            
+                        
+                     
+                    </View>
+
+                   
 
                     
 
                 </View>
             </DrawerContentScrollView>
-            <Drawer.Section style={styles.bottomDrawerSection} >
-                <DrawerItem 
-                    icon={({color, size}) => (
-                        <MaterialIcons name="exit-to-app" size={size} color={color} />
-                    )}
-                    label="Sign Out"
-                    onPress={() => {
-                        dispatch(authAction.logout())
-                    }} 
-                />
-
-                
-            </Drawer.Section>
-
+            
             
         </View>
     )
@@ -138,21 +159,23 @@ export default DrawerContent
 
 const styles = StyleSheet.create({
     drawerContent : {
-        flex:1
+        flex:1,
+        backgroundColor:'white'
     },
     userInfoSection:{
-        paddingHorizontal:15
-        
+        paddingHorizontal:15,
+        paddingBottom:5,
+        elevation:1
     },
     userProfileSection:{
-        height:70,
-        flexDirection:'row',
-        justifyContent:'flex-start',
-        alignItems:'center'
+        height:130,
+        justifyContent:'flex-end'
     },
     title:{
-        fontSize:18,
-        fontWeight:'bold',
+        fontSize:16,
+        paddingTop:3,
+        fontFamily:FontFamily.bold,
+        color:'white'
     },
     caption:{
         fontSize:14,
@@ -182,5 +205,26 @@ const styles = StyleSheet.create({
         justifyContent:'space-between',
         paddingVertical:12,
         paddingHorizontal:16
-    }
+    },
+    tab:{
+        height:75,
+        borderBottomColor:'#f1f1f1',
+        borderBottomWidth:1,
+        flexDirection:'row',
+        alignItems:'center'
+    },
+    tabIcon:{
+        width:'20%',
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    tabText:{
+        width:'80%'
+    },
+    minitab:{
+        height:35,
+        
+        flexDirection:'row',
+        alignItems:'center'
+    },
 })

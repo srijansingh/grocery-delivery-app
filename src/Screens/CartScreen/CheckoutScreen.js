@@ -17,7 +17,7 @@ const CheckoutScreen = (props) => {
     const addressData = useSelector(state => state.address.address);
     const selectedAddress = addressData.find(address => address.id === selectedId);
 
-    
+    console.warn(selectedAddress)
 
     useEffect(() => {
         if( cartTotalItem < 1){
