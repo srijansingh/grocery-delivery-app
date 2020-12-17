@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "485804614823",
+    "project_id": "shoppitant",
+    "storage_bucket": "shoppitant.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:485804614823:android:fe52c37a5912bcbc462782",
+        "android_client_info": {
+          "package_name": "com.dholpurshare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "485804614823-ru86cg77433mdsprf1gaudfmh0k3v2um.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHH_sNpT4alEhEd-Z2NoSEoMmvq83OyIk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "485804614823-ru86cg77433mdsprf1gaudfmh0k3v2um.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
