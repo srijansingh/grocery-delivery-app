@@ -9,9 +9,9 @@ import { ActivityIndicator} from 'react-native-paper';
 const CustomButton = (props) => {
     return (
         <LinearGradient colors={['#FFA641', Color.accent]} style={styles.buttonBox} >
-            <TouchableNativeFeedback onPress={props.onButtonPress} disabled={props.isLoading} >
+            <TouchableNativeFeedback  onPress={props.onButtonPress} disabled={props.isLoading || props.disabled} >
                 <View style={styles.button} >
-                    <Text style={styles.buttonText} >{props.title}</Text>
+                    <Text style={styles.buttonText} >{props.title}{props.disabled}</Text>
 
                     {
                         props.isLoading ?
@@ -35,7 +35,7 @@ export default CustomButton
 const styles = StyleSheet.create({
     buttonBox:{
         width:'100%',
-        height:50,
+        height:45,
         borderRadius:5,
         overflow:'hidden',
        

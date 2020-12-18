@@ -131,6 +131,7 @@ const OrderDetailScreen = (props) => {
                 <ActionComponent 
                     onCancelPress={() => {}}
                     onTrackPress={handleTracking}
+                    status={order.status}
                 />
 
                 <View style={styles.delivery}>

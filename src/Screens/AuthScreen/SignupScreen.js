@@ -11,15 +11,16 @@ import * as Animatable from 'react-native-animatable';
 import CustomButton from '../../Component/CustomButton'
 import { useDispatch } from 'react-redux'
 import * as authAction from '../../Store/action/auth';
+import ModalLoader from '../../Component/ModalLoader'
 
 const SignupScreen = (props) => {
     const [isBlur, setIsBlur] = useState(false)
     const [isError, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
-    const [email, setEmail] = useState(null)
-    const [password, setPassword] = useState(null)
-    const [name, setName] = useState(null);
-    const [confirmPwd, setConfirmPwd] = useState(null)
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [name, setName] = useState('');
+    const [confirmPwd, setConfirmPwd] = useState('')
 
     const dispatch = useDispatch();
 
@@ -57,7 +58,7 @@ const SignupScreen = (props) => {
 
 
     return (
-       
+       <>
         <ScrollView>
            <View style={styles.container}>
              
@@ -85,7 +86,7 @@ const SignupScreen = (props) => {
                             label="Name"
                             placeholder="Name"
                             icon="account-circle-outline"
-                            value={name}
+                            value={name.length >2}
                             set={setName}
                         />
 
@@ -93,7 +94,7 @@ const SignupScreen = (props) => {
                             label="Email"
                             placeholder="Email"
                             icon="email-outline"
-                            value={email}
+                            value={email.includes('@')}
                             set={setEmail}
                             email
                         />
@@ -103,7 +104,7 @@ const SignupScreen = (props) => {
                             placeholder="Password"
                             icon="key-outline"
                             secureTextEntry={password !== null}
-                            value={password}
+                            value={password.length >=6}
                             set={setPassword}
                         />
 
@@ -112,7 +113,7 @@ const SignupScreen = (props) => {
                             placeholder="Password"
                             icon="key-outline"
                             secureTextEntry={password !== null}
-                            value={confirmPwd}
+                            value={confirmPwd === password && password.length > 5}
                             set={setConfirmPwd}
                         />
 
@@ -123,6 +124,7 @@ const SignupScreen = (props) => {
                                 icon="arrow-forward"
                                 onButtonPress={authHandler}
                                 isLoading={isLoading}
+                                disabled={name.length < 3 || !email.includes('@') || password.length < 6 || confirmPwd !== password}
                             />
 
                             <View style={styles.info}>
@@ -151,6 +153,11 @@ const SignupScreen = (props) => {
                 
            </View>
            </ScrollView>
+           
+           <ModalLoader 
+            visible={isLoading}
+           />
+           </>
  
     )
 }

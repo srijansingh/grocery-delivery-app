@@ -9,6 +9,7 @@ import { TouchableRipple } from 'react-native-paper'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import { useDispatch, useSelector } from 'react-redux'
 import * as cartAction from '../../../Store/action/cart'
+import ImagePlaceholder from '../../../Component/ImagePlaceholder'
 
 const {width, height} = Dimensions.get("screen")
 
@@ -95,9 +96,9 @@ const ProductHorizontalComponent = (props) => {
             width:width,
             marginHorizontal:props.marginHorizontal,
             backgroundColor:'white',
-            borderBottomWidth:1,
+            borderBottomWidth:0,
             borderBottomColor:'#f1f1f1',
-            elevation:1,
+          
             borderRadius:props.borderRadius,
             
             overflow:'hidden'
@@ -117,9 +118,10 @@ const ProductHorizontalComponent = (props) => {
                 height:'100%',
                 paddingVertical:8,
                 paddingHorizontal:5,
-                justifyContent:'space-around',
+                justifyContent:'center',
                 alignItems:'center'
             }}>
+                <ImagePlaceholder />
                 <Image  
                     style={{
                         width:100,
@@ -129,6 +131,7 @@ const ProductHorizontalComponent = (props) => {
                         uri:props.url
                     }}
                 />
+               
             </View>
 
             <View style={{

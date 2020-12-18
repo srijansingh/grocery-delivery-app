@@ -32,7 +32,7 @@ const Placeholder = (props) => {
 
     return (
         <View style={{
-            backgroundColor:'#eeeeee',
+            backgroundColor:'#f1f1f1',
             borderRadius:8,
             height:props.height,
             width:props.width,

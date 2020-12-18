@@ -25,7 +25,7 @@ const NocartItem = (props) => {
                                 fontFamily:FontFamily.light,
                                 color:'#000',
                                 paddingVertical:4
-                            }}>No items in your cart</Text>
+                            }}>{props.message}</Text>
                             <Text style={{
                                 fontSize:14,
                                 fontFamily:FontFamily.light,

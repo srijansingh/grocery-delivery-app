@@ -11,8 +11,10 @@ import * as addressAction from '../../Store/action/address'
 import Animated from 'react-native-reanimated';
 import { useSelector, useDispatch } from 'react-redux'
 import ModalLoader from '../../Component/ModalLoader'
+import { Alert } from 'react-native'
 
 const AddressScreen = (props) => {
+    const {from } = props.route.params;
     const userid = useSelector(state => state.auth.userId);
     const [modelOpen, setModalOpen] = useState(false)
     const [nameError, setNameError] = useState(false)
@@ -133,8 +135,13 @@ const AddressScreen = (props) => {
     })
 
     const [isAdding, setIsAdding] = useState(false)
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(false);
     const onAddButtonPress = async () => {
+        
+        if(!userid || !name || !mobile || !pincode || !locality || !district || !state){
+            setError(true)
+            return;
+        }
 
         setIsAdding(true)
         const data = {
@@ -151,12 +158,27 @@ const AddressScreen = (props) => {
         try{
             await dispatch(addressAction.addAddress(data));
             setIsAdding(false)
-            props.navigation.navigate('ChooseAddress', {add:true})
+
+            if(from === 'choose'){
+                props.navigation.navigate('ChooseAddress', {add:true})
+            }else{
+                props.navigation.goBack()
+            }   
+
         }catch(err){
-            setError(err.message)
+            setError(true)
         }
        
     }
+
+    useEffect(()=>{
+        if(error){
+            Alert.alert('An error occurred','All fields are required' [
+                {text:'Okay'}
+            ])
+        }
+  },[error])
+
 
     return (
         <>

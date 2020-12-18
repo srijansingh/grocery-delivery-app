@@ -74,7 +74,7 @@ const AddressScreen = (props) => {
                     <Text style={{fontFamily:FontFamily.bold, color:Color.icon}}>Remove</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity 
+                {/* <TouchableOpacity 
                 style={styles.button}
                     activeOpacity={0.8}
                     onPress={() => {
@@ -83,7 +83,7 @@ const AddressScreen = (props) => {
                     
                 >
                     <Text style={{fontFamily:FontFamily.bold, color:Color.icon}}>Edit</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 </View>
             </View>
             </TouchableOpacity>
@@ -100,7 +100,7 @@ const AddressScreen = (props) => {
                     name="arrow-back"
                 />
                 <View>
-                    <Text style={styles.title}>SELECT ADDRESS</Text>
+                    <Text style={styles.title}>ADDRESS</Text>
                 </View>
                 
                 
@@ -117,7 +117,7 @@ const AddressScreen = (props) => {
                         <TouchableOpacity 
                             activeOpacity={0.8}
                             onPress={() => {
-                                props.navigation.navigate('Address')
+                                props.navigation.navigate('Address', props.navigation.navigate('Address', {from:'user'}))
                             }}
                             style={styles.addButn}>
                                 <Text style={styles.buttonText}> ADD NEW ADDRESS</Text>

@@ -30,7 +30,7 @@ const InputBox = (props) => {
                     onChangeText={(value) => props.set(value)}
                 />
                 {
-                    props.value !== null
+                    props.value
                     ?
                     <View style={styles.icon}>
                     <Icon name="check-circle-outline" size={24} color="green" />

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react'
 import { Image, StyleSheet, Text, View } from 'react-native'
 import { useSelector } from 'react-redux';
@@ -125,7 +126,7 @@ const SubTotalComponent = () => {
                                         marginHorizontal:15
                                     }}>
                                         <Text style={{fontFamily:FontFamily.light, color:Color.icon}}>Estimate delivery by </Text>
-                                        <Text style={{fontFamily:FontFamily.regular, color:Color.icon}}>21 August</Text>
+                                        <Text style={{fontFamily:FontFamily.regular, color:Color.icon}}>{moment().add(5,'day').format('DD MMM yyyy')}</Text>
                                     </View>
                                 </View>
                             )

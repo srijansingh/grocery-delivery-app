@@ -151,7 +151,7 @@ const ProductDetailScreen = ({route, navigation}) => {
                     
                 </View>
                 <BadgeButton
-                       goBack={() => {props.navigation.jumpTo('SearchStack')}}
+                       goBack={() => {navigation.navigate('CartScreen')}}
                         color={Color.icon}
                         name="shopping-cart"
                         count={cartCount}
@@ -282,7 +282,7 @@ const ProductDetailScreen = ({route, navigation}) => {
         </ScrollView>
         <CartButton
                     onButtonPress={() => (
-                        navigation.navigate('CartStack')
+                        navigation.navigate('CartScreen')
                     )}
                 />
         </>

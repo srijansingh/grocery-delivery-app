@@ -13,6 +13,7 @@ const {width, height} = Dimensions.get("screen");
 
 import * as subcategoryAction from '../../Store/action/subcategory'
 import CartButton from '../../Component/CartButton';
+import Placeholder from '../../Component/Placeholder';
 
 const CategoryScreen = ({route, navigation}) => {
     const { title,id,subId, subIndex } = route.params;
@@ -124,13 +125,7 @@ const CategoryScreen = ({route, navigation}) => {
     return (
  
              <View style={{flex:1}}> 
-             <Animated.View
-                style={{
-                    transform:[
-                        {translateY:transllateY}
-                    ]
-                }}
-             >
+             <View>
                 <View >
                 <View style={styles.header}>
                     <View style={styles.headerText} >
@@ -151,6 +146,12 @@ const CategoryScreen = ({route, navigation}) => {
                     />
                 </View>
 
+                {
+                    isLoading ? 
+                    <View style={{height:60, marginVertical:5, backgroundColor:'white',justifyContent:'center', alignItems:'center'}}>
+                        <Placeholder width="90%" height="80%" />
+                    </View>
+                :
                 <View style={styles.subcategory}>
                     <FlatList
                         getItemLayout={getItemLayout}
@@ -163,6 +164,8 @@ const CategoryScreen = ({route, navigation}) => {
                         renderItem={renderItem}
                     />
                 </View>
+                }
+               
                 </View>
 
                
@@ -172,35 +175,36 @@ const CategoryScreen = ({route, navigation}) => {
                        loader
                     :
                     <FlatList 
-                    style={{marginBottom:230}}
+                   style={{marginBottom:250}}
                     data={productSubcategory}
                     keyExtractor={item => item._id}
-                    renderItem={itemData => (
-                     
-                        <ProductHorizontalComponent 
-                        marginTop={6}
-                        marginBottom={2}
-                        borderRadius={5}
-                        marginHorizontal="2%"
-                        width={'96%'}
-                            onButtonPress={() => {
-                                navigation.navigate('ProductDetail',{
-                                    category:itemData.item.category,
-                                    subcategory:itemData.item.subcategory,
-                                    id:itemData.item._id,
-                                    title:itemData.item.title
-                                })
-                            }}
-                            id={itemData.item._id}
-                            title={itemData.item.title}
-                            onSwipeFromLeft={() => alert('hello')}
-                            discount={itemData.item.discount*100}
-                            cp={itemData.item.costprice}
-                            sp={itemData.item.sellingprice}
-                            url = {itemData.item.imageurl}
-                        />
-                       
-                    )}
+                    renderItem={itemData => {
+                        let discount = ((itemData.item.costprice - itemData.item.sellingprice) *100)/itemData.item.costprice
+                        return (
+                            <ProductHorizontalComponent 
+                                marginTop={5}
+                                marginBottom={2}
+                                borderRadius={0}
+                                marginHorizontal="0%"
+                                width={'100%'}
+                                    onButtonPress={() => {
+                                        navigation.navigate('ProductDetail',{
+                                            category:itemData.item.category,
+                                            subcategory:itemData.item.subcategory,
+                                            id:itemData.item._id,
+                                            title:itemData.item.title
+                                        })
+                                    }}
+                                    id={itemData.item._id}
+                                    title={itemData.item.title}
+                                    onSwipeFromLeft={() => alert('hello')}
+                                    discount={discount}
+                                    cp={itemData.item.costprice}
+                                    sp={itemData.item.sellingprice}
+                                    url = {itemData.item.imageurl}
+                                />
+                                )
+                    }}
                     onScroll={(e) => {
                         scrollY.setValue(e.nativeEvent.contentOffset.y)
                     }}
@@ -208,12 +212,12 @@ const CategoryScreen = ({route, navigation}) => {
                 }
                 </View>
                
-                </Animated.View>
+                </View>
                 
             
                 <CartButton 
                     onButtonPress={() => (
-                        navigation.navigate('CartStack')
+                        navigation.navigate('CartScreen')
                     )}
                 />
                     
@@ -251,6 +255,7 @@ const styles = StyleSheet.create({
         width:'100%',
         backgroundColor:'white',
         elevation:2,
+        marginVertical:5,
         paddingHorizontal:6,
         flexDirection:'row',
         alignItems:'center',

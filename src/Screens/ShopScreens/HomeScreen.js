@@ -140,6 +140,7 @@ useEffect(() => {
 
   
   const products = productData.slice(10, 20).map((list, index) => {
+    let discount = ((list.costprice - list.sellingprice) *100)/list.costprice
     return <ProductComponent 
             key={index}
             onButtonPress={() => {
@@ -147,7 +148,7 @@ useEffect(() => {
                   category:list.category,
                   subcategory:list.subcategory,
                   id:list._id,
-                  discount:list.discount*100,
+                  discount:discount.toFixed(0),
                   cp:list.costprice,
                   sp:list.sellingprice,
                   url:list.imageurl,
@@ -157,7 +158,7 @@ useEffect(() => {
           }}
             id={list._id}
             title={list.title}
-            discount={list.discount*100}
+            discount={discount.toFixed(0)}
             cp={list.costprice}
             sp={list.sellingprice}
             url = {list.imageurl}
@@ -339,7 +340,9 @@ useEffect(() => {
                           themeColor="#FF4600"
                           backgroundColor={'#fff'}
                           buttonTitle="View All"
-                          onButtonPress={() => alert('Presses')}
+                          onButtonPress={() => {
+                            props.navigation.navigate('ThemeScreen')
+                          }}
                         />
 
                         <View style={styles.slider}>
@@ -364,7 +367,9 @@ useEffect(() => {
                             themeColor={Color.accent}
                             backgroundColor="white"
                             buttonTitle="View All"
-                            onButtonPress={() => alert('Presses')}
+                            onButtonPress={() => {
+                              props.navigation.navigate('ThemeScreen')
+                            }}
                             style={{
                               marginBottom:6
                             }}
@@ -466,12 +471,12 @@ title:{
     alignItems:'center'
     },
    
-  mainContainer:{
-    padding:2.5
-  },
+  // mainContainer:{
+  //   padding:2.5
+  // },
   catagoryContainer:{
     width:'100%',
-    borderRadius:8,
+    // borderRadius:8,
     padding:5,
     backgroundColor:'white',
     elevation:1,

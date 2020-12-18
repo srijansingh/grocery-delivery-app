@@ -11,6 +11,7 @@ import CheckoutScreen from '../../Screens/CartScreen/CheckoutScreen';
 import SelectAddress from '../../Screens/CartScreen/SelectAddress';
 import ChooseAddress from '../../Screens/CartScreen/ChooseAddress';
 import ConfirmationScreen from '../../Screens/CartScreen/ConfirmationScreen';
+import ThemeScreen from '../../Screens/ShopScreens/ThemeScreen';
 
 const Stack = createStackNavigator();
 
@@ -34,6 +35,15 @@ const HomeNavigator = () => {
             <Stack.Screen 
                 name="Category" 
                 component={CategoryScreen} 
+                options = {{
+                    title:"Cat",
+                    headerShown:false
+                }}
+            />
+
+            <Stack.Screen 
+                name="ThemeScreen" 
+                component={ThemeScreen} 
                 options = {{
                     title:"Cat",
                     headerShown:false

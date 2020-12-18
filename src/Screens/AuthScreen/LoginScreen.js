@@ -9,15 +9,18 @@ import CustomButton from '../../Component/CustomButton'
 
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as authAction from '../../Store/action/auth';
+import ModalLoader from '../../Component/ModalLoader'
 
 const LoginScreen = (props) => {
     const [isError, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
-    const [email, setEmail] = useState(null)
-    const [password, setPassword] = useState(null)
-    const dispatch = useDispatch()
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const dispatch = useDispatch();
+
+    const notif_token = useSelector(state => state.notif.token);
 
     const handleClick=() => {
         setIsLoading(true)
@@ -25,7 +28,7 @@ const LoginScreen = (props) => {
 
     const authHandler = async() => {
         let action;
-        action = authAction.login(email, password)
+        action = authAction.login(email, password, notif_token[0])
         setError(null)
         setIsLoading(true)
 
@@ -120,7 +123,7 @@ const LoginScreen = (props) => {
                             label="Email"
                             placeholder="Email"
                             icon="account-circle-outline"
-                            value={email}
+                            value={email.includes('@')}
                             set={setEmail}
                             keyboardType="email-address"
                             required
@@ -132,7 +135,7 @@ const LoginScreen = (props) => {
                             label="Password"
                             placeholder="Password"
                             icon="key-outline"
-                            value={password}
+                            value={password.length >=6}
                             set={setPassword}
                             secureTextEntry={password !== null}
                             required
@@ -149,6 +152,7 @@ const LoginScreen = (props) => {
                                 icon="arrow-forward"
                                 onButtonPress={authHandler}
                                 isLoading={isLoading}
+                                disabled={!email.includes('@') || password.length < 6}
 
                             />
 
@@ -203,6 +207,10 @@ const LoginScreen = (props) => {
                 initialSnap={1}
                 callbackNode={fall}
                 enabledGestureInteraction={true}
+            />
+
+            <ModalLoader 
+                visible={isLoading}
             />
       
        </>

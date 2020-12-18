@@ -135,7 +135,7 @@ const ChooseAddress = (props) => {
                         <TouchableOpacity 
                             activeOpacity={0.8}
                             onPress={() => {
-                                props.navigation.navigate('Address')
+                                props.navigation.navigate('Address', {from:'choose'})
                             }}
                             style={styles.addButn}>
                                 <Text style={styles.buttonText}> ADD NEW ADDRESS</Text>

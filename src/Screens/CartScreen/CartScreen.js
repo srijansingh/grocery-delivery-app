@@ -117,7 +117,7 @@ const CartScreen = (props) => {
 
     let mycart;
     if(cartTotalItem < 1){
-        mycart = <NocartItem goToHome={() => props.navigation.navigate('Home')} />
+        mycart = <NocartItem message={'No item in cart'} goToHome={() => props.navigation.navigate('Home')} />
     }else{
         mycart = (
             <>

@@ -63,7 +63,7 @@ const DrawerContent = (props) => {
                     <View style={styles.drawerSection} >
                         <TouchableOpacity 
                                 onPress={() => {
-                                    props.navigation.navigate('HomeStack')
+                                    props.navigation.navigate('ThemeScreen')
                                 }}
                                 style={styles.tab}
                             >

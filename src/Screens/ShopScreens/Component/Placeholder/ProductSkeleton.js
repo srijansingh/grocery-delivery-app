@@ -17,27 +17,29 @@ const ProductSkeleton = () => {
             justifyContent:'center',
             alignItems:'center',
             padding:8,
-            borderColor:"#e6e6e6",
-            borderWidth:1,
+            borderColor:"#f1f1f1",
+            borderWidth:0.3,
             }}
         >
 
             <View style={{width:'100%', height:'70%', flexDirection:'row',  }}>
             
-            <View style={{width:'60%',height:'90%'}}>
-                <Placeholder height="100%" width="100%" />
+            <View style={{width:'60%',height:'90%', justifyContent:'center', alignItems:'center'}}>
+                <View style={{width:'80%',height:'80%'}}>
+                    <Placeholder height="100%" width="100%" />
+                </View>
             </View>
 
             <View style={{width:'40%',height:'100%', justifyContent:'center', paddingHorizontal:10, alignItems:'flex-start'}}>
-                <View style={{width:'80%',height:'20%', marginBottom:10}}>
+                <View style={{width:'80%',height:'10%', marginBottom:10}}>
                 <Placeholder height="100%" width="100%" />
                 </View>
 
-                <View style={{width:'70%',height:'15%', marginBottom:10}}>
+                <View style={{width:'70%',height:'10%', marginBottom:10}}>
                 <Placeholder height="100%" width="100%" />
                 </View>
 
-                <View style={{width:'80%',height:'18%', marginBottom:10}}>
+                <View style={{width:'80%',height:'10%', marginBottom:10}}>
                 <Placeholder height="100%" width="100%" />
                 </View> 
             </View>
@@ -46,11 +48,11 @@ const ProductSkeleton = () => {
             </View>
 
             <View style={{height:'30%', width:'100%', paddingVertical:5, justifyContent:'center', alignItems:'center'}}>
-                <View style={{width:'90%',height:'35%', marginBottom:10}}>
+                <View style={{width:'90%',height:'20%', marginBottom:10}}>
                 <Placeholder height="100%" width="100%" />
                 </View> 
 
-                <View style={{width:'80%',height:'50%', marginBottom:10}}>
+                <View style={{width:'80%',height:'20%', marginBottom:10}}>
                 <Placeholder height="100%" width="100%" />
                 </View> 
 

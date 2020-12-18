@@ -3,13 +3,22 @@ import { StyleSheet,ActivityIndicator, View, StatusBar } from 'react-native'
 import  AsyncStorage  from '@react-native-async-storage/async-storage';
 import color from "../../Constant/Color";
 import * as authAction from "../../Store/action/auth";
-import { useDispatch } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
+import firebase from 'react-native-firebase';
+import * as notifAction from '../../Store/action/notif_token';
 const StartupScreen = (props) => {
 
     const dispatch = useDispatch();
+   
+    const getFcmToken = async() => {
+        const firebaseToken = await firebase.messaging().getToken();
+        
+        dispatch(notifAction.createNotif(firebaseToken))
+        
+      }
 
     useEffect(()=>{
+        getFcmToken();
         const tryLogin = async () => {
             const userData = await AsyncStorage.getItem('userData');
             if(!userData){

@@ -151,6 +151,13 @@ const StatusComponent = (props) => {
                                     color={'white'}
                                     size={25}
                                 />
+                                <View style={styles.badges}>
+                                    <IonIcons
+                                        name="ios-checkmark-circle"
+                                        color={Color.darkgreen}
+                                        size={12}
+                                    />
+                                    </View>
                             </View>
                             <View style={{paddingHorizontal:15}}>
                                 <Text style={{color:'white', fontFamily:FontFamily.bold}}>Delivered</Text>
@@ -162,14 +169,14 @@ const StatusComponent = (props) => {
                         </View>
                     )
 
-                    case 'canceled':
+                    case 'cancelled':
                         return (
                             <View style={{
                                 padding:15
                             }}>
                             <View style={{
                                 height:70,
-                                backgroundColor:'red',
+                                backgroundColor:Color.icon,
                                 alignItems:'center',
                                 flexDirection:'row',
                                 padding:20
@@ -208,4 +215,16 @@ const StatusComponent = (props) => {
 
 export default StatusComponent
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    badges:{
+        position:'absolute',
+        bottom:2,
+        right:0,
+        backgroundColor:'white',
+        borderRadius:50,
+        height:12,
+        width:12,
+        justifyContent:'center',
+        alignItems:'center'
+    }
+})

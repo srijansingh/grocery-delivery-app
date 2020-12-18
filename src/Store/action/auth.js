@@ -66,7 +66,7 @@ export const signup = (name, email, password) => {
 
 
 
-export const login = (email, password) => {
+export const login = (email, password, notif_token) => {
     return async dispatch => {
         const response = await fetch(
             URL+'/login',
@@ -77,7 +77,8 @@ export const login = (email, password) => {
                 },
                 body: JSON.stringify({
                     email:email,
-                    password:password
+                    password:password,
+                    notif_token:notif_token
                 })
             }
         );

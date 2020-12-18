@@ -13,9 +13,10 @@ export default (state = initialState, action) => {
                 action.address._id,
                 action.address.userid,
                 action.address.name,
+                action.address.mobile,
                 action.address.pincode,
-                action.address.address,
                 action.address.locality,
+                action.address.address,
                 action.address.district,
                 action.address.state
             )

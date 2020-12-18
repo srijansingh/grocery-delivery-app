@@ -23,11 +23,15 @@ const SelectAddress = (props) => {
         setTimeout(() => {
             setIsLoading(false)
         }, 500);
-        if(!addressId){
-            setId(addressData[0].id)
-        }
-        else{
-            setId(addressId)
+        if(addressData.length < 1){
+            props.navigation.navigate('Address', {from:'choose'})
+        }else{
+            if(!addressId && addressData.length >0){
+                setId(addressData[0].id)
+            }
+            else{
+                setId(addressId)
+            }
         }
         
     }, [addressId]);
@@ -86,6 +90,8 @@ const SelectAddress = (props) => {
                 <SubTotalComponent />
                 </>
                 }
+
+           
 
 
 

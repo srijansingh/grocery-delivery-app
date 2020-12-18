@@ -102,7 +102,7 @@ const ProductComponent = (props) => {
                     />
                     <View 
                         style={{
-                            justifyContent:'center',
+                            justifyContent:'flex-start',
                             alignItems:'flex-start',
                             padding:10,
                             width:'40%'
@@ -111,15 +111,20 @@ const ProductComponent = (props) => {
                             <Text 
                                 style={{
                                     fontSize:26,
-                                    fontFamily:FontFamily.black
+                                    fontFamily:FontFamily.black,
+                                    color:Color.icon
                                 }}>
                                     {'\u20B9'+props.sp}
                                 </Text>
                         </View>
-                        <View>
+                        {
+                            props.discount > 0 &&
+
+                            <>
+                                <View>
                             <Text 
                                 style={{
-                                    fontSize:20,
+                                    fontSize:18,
                                     color:Color.icon,
                                     fontFamily:FontFamily.light,
                                     textDecorationLine:'line-through'
@@ -144,6 +149,8 @@ const ProductComponent = (props) => {
                                     {props.discount}% off
                                 </Text>
                         </View>
+                            </>
+                        }
                     </View>
                 </View>
                 <View style={{
@@ -187,7 +194,7 @@ const styles = StyleSheet.create({
          alignItems:'center',
         //  elevation:3,
         borderColor:"#e6e6e6",
-            borderWidth:1,
+            borderWidth:0.5,
          padding:8
       },
       buttonBox:{

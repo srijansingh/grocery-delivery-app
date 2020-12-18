@@ -15,6 +15,7 @@ import { TouchableOpacity } from 'react-native'
 import TrackingComponent from './Component/TrackingComponent'
 import RenderOverviewStatus from './Component/RenderOverviewStatus'
 import RenderOverviewAction from './Component/RenderOverviewAction'
+import NocartItem from '../CartScreen/Component/NocartItem'
 
 const OrderOverviewScreen = (props) => {
     const [error, setError] = useState();
@@ -222,7 +223,7 @@ const OrderOverviewScreen = (props) => {
             </View>  
 
            <ScrollView>
-               {orderList}
+               { orders.length < 1 ? <NocartItem goToHome={() => props.navigation.navigate('Home')} message="No item ordered"/> : orderList}
            </ScrollView>
             <TrackingComponent 
                 visible={isTrackingOpen} 

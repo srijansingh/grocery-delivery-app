@@ -33,10 +33,10 @@ export default CategoryComponent
 
 const styles = StyleSheet.create({
     category:{
-        width:'32%',
+        width:'30%',
        height:width/3,
-       marginVertical:2,
-        marginHorizontal:'0.6%',
+       marginVertical:5,
+        marginHorizontal:'1.5%',
        backgroundColor:'#FD7600',
        padding:2,
        paddingBottom:0,
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
        justifyContent:'space-between',
        overflow:'hidden',
        alignItems:'center',
-       elevation:4
+      
       },
       categoryImage:{
         flex:3,

@@ -123,7 +123,7 @@ const AccordianComponent = (props) => {
                     </View>
 
                     <View style={styles.description}>
-                        <Text style={styles.offer}>Up to 50% OFF</Text>
+                        
                         <Text style={styles.titles}>{props.title}</Text>
                         <Text style={styles.subtitle} numberOfLines={3}>
                             {
