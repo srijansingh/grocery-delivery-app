@@ -6,6 +6,7 @@ import Colors from "../../Constant/Color"
 import FaqsScreen from '../../Screens/UserScreen/FaqsScreen';
 import AboutusScreen from '../../Screens/UserScreen/AboutusScreen';
 import TermsScreen from '../../Screens/UserScreen/TermsScreen';
+import UserDetails from '../../Screens/UserScreen/UserDetails';
 const Stack = createStackNavigator();
 
 const defaultNavOptions = {
@@ -22,6 +23,13 @@ const UserNavigator = () => {
             <Stack.Screen
                 name="User"
                 component={UserScreen}
+                options = {{
+                  headerShown:false
+              }}
+            />
+        <Stack.Screen
+                name="UserDetail"
+                component={UserDetails}
                 options = {{
                   headerShown:false
               }}

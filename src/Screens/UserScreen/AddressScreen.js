@@ -7,6 +7,7 @@ import Color from '../../Constant/Color';
 import FontFamily from '../../Constant/FontFamily';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import * as addressAction from '../../Store/action/address'
+import { URL } from '../../../BASE_URL';
 
 const AddressScreen = (props) => {
    
@@ -34,6 +35,24 @@ const AddressScreen = (props) => {
 
     const dispatch = useDispatch();
     
+
+    const deleteAddress = (id) => {
+        setIsLoading(true)
+        fetch(URL+'/address/'+id, {
+            method:'DELETE',
+            headers:{
+                'Content-Type':'application/json'
+            }
+        })
+        .then(result => {
+            console.log(result)
+            setIsLoading(false)
+        })
+        .catch(err => {
+            console.log(err)
+            setIsLoading(false)
+        })
+    }
    
 
     const data = addressData.map((data, index) => {
@@ -66,9 +85,7 @@ const AddressScreen = (props) => {
                 <TouchableOpacity 
                 style={styles.button}
                     activeOpacity={0.8}
-                    onPress={() => {
-                        props.navigation.navigate('Address')
-                    }}
+                    onPress={() => deleteAddress(data.id)}
                     
                 >
                     <Text style={{fontFamily:FontFamily.bold, color:Color.icon}}>Remove</Text>

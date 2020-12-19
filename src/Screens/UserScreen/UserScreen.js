@@ -62,6 +62,25 @@ const UserScreen = (props) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
+                onPress={() => props.navigation.navigate('UserDetail')} 
+                 activeOpacity={0.6}
+                style={styles.tabContainer} >
+                    <View style={styles.data}>
+                        <View style={styles.icons}> 
+                            <MaterialIcons name="account-circle" size={24} color={Color.icon} />
+                        </View>
+                        <View>
+                            <Text style={styles.headTitle}>Profile  Setting</Text>
+                            <Text style={styles.subTitle}>Manage your profile here</Text>
+                        </View>
+                    </View>
+
+                    <View style={styles.icons}>
+                        <MaterialIcons name="keyboard-arrow-right" size={20} color={Color.icon} />
+                    </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity
                 onPress={() => props.navigation.navigate('CartScreen')} 
                  activeOpacity={0.6}
                 style={styles.tabContainer} >
