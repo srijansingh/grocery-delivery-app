@@ -1,6 +1,6 @@
 # Grocery Super Market Application
 
-![heltoduct](https://drive.google.com/file/d/1GFWiJPB-Pgk_s4bLt29XtZcCR6qip22-/view?usp=sharing)
+![Grocery App](https://i.postimg.cc/jdvM8QYS/HOME.jpg)
 
 
 # Working of this Android Application
