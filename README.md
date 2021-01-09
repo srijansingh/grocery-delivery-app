@@ -5,12 +5,12 @@
 
 # Working of this Android Application
 
-i)   User can register to the application
-ii)  Landing page displays skeleton placeholder while loading the page content, home page contains offers, product and product category. 
-ii)  User can add product to cart whose functionality is same as Groffers Mobile App.
-iii) User can visit orders and recieve notification on order status change.
-iv) Performed software development lifecycle including the Quality Analysis, Development and Production.  
-v)  Visit Application:-https://drive.google.com/file/d/15aYaGaS1UmM3uPY4ZyPrX-ou7Wls0zP2/view?usp=sharing     
+i)   User can register to the application  
+ii)  Landing page displays skeleton placeholder while loading the page content, home page contains offers, product and product category.   
+ii)  User can add product to cart whose functionality is same as Groffers Mobile App.  
+iii) User can visit orders and recieve notification on order status change.  
+iv) Performed software development lifecycle including the Quality Analysis, Development and Production.    
+v)  Visit Application:-https://drive.google.com/file/d/15aYaGaS1UmM3uPY4ZyPrX-ou7Wls0zP2/view?usp=sharing       
 
 
 # Made in
