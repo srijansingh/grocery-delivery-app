@@ -1,6 +1,6 @@
 # Grocery Super Market Application
 
-![Grocery App](https://i.postimg.cc/jdvM8QYS/HOME.jpg)
+![Grocery App](https://i.postimg.cc/jdvM8QYS/HOME.jpg) ![Grocery App](https://i.postimg.cc/nLTVrPyt/Whats-App-Image-2021-01-09-at-3-26-19-PM.jpg)
 
 
 # Working of this Android Application
